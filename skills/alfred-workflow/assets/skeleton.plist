@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!-- Annotated Alfred workflow skeleton. Graph:
+
+  [external trigger]──▶[arg and vars]──▶[script filter]──▶[conditional]──┬─▶[notification]   (matched)
+                                                                          └─▶[clipboard]      (else)
+
+  Replace every placeholder UUID with `uuidgen` output before extending.
+  XML comments are legal here but are dropped on plistlib round-trips.        -->
+<dict>
+	<key>bundleid</key>
+	<string>com.example.skeleton</string>
+	<key>name</key>
+	<string>Skeleton</string>
+	<key>description</key>
+	<string>Replace me</string>
+	<key>createdby</key>
+	<string></string>
+	<key>category</key>
+	<string>Productivity</string>
+	<key>disabled</key>
+	<false/>
+	<key>version</key>
+	<string>1.0</string>
+	<key>webaddress</key>
+	<string></string>
+	<key>readme</key>
+	<string>## Usage
+
+Explain the workflow here (shown in Alfred's README tab).</string>
+
+	<key>connections</key>
+	<dict>
+		<!-- external trigger → arg and vars -->
+		<key>11111111-1111-4111-8111-111111111111</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>22222222-2222-4222-8222-222222222222</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<!-- arg and vars → script filter -->
+		<key>22222222-2222-4222-8222-222222222222</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>33333333-3333-4333-8333-333333333333</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<!-- script filter → conditional -->
+		<key>33333333-3333-4333-8333-333333333333</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>44444444-4444-4444-8444-444444444444</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<!-- conditional: named branch carries sourceoutputuid, else branch does not -->
+		<key>44444444-4444-4444-8444-444444444444</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>55555555-5555-4555-8555-555555555555</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+				<key>sourceoutputuid</key>
+				<string>AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA</string>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>66666666-6666-4666-8666-666666666666</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+
+	<key>objects</key>
+	<array>
+		<!-- External Trigger: lets scripts/other workflows start this chain -->
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>availableviaurlhandler</key>
+				<false/>
+				<key>triggerid</key>
+				<string>start</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.external</string>
+			<key>uid</key>
+			<string>11111111-1111-4111-8111-111111111111</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+
+		<!-- Arg and Vars: set stream variables, reshape the argument -->
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
+				<key>variables</key>
+				<dict>
+					<key>mode</key>
+					<string>demo</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>22222222-2222-4222-8222-222222222222</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+
+		<!-- Script Filter: keyword comes from User Configuration via {var:...} -->
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>{var:keyword}</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Working…</string>
+				<key>script</key>
+				<string>query="$1"
+printf '{"items":[{"title":"Echo: %s","subtitle":"Press Enter","arg":"%s"}]}' "$query" "$query"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>skipuniversalaction</key>
+				<true/>
+				<key>subtext</key>
+				<string>Skeleton demo</string>
+				<key>title</key>
+				<string>Skeleton</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>33333333-3333-4333-8333-333333333333</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+
+		<!-- Conditional: condition uid AAAA… is referenced by sourceoutputuid above -->
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string>{query}</string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>1</integer>
+						<key>matchstring</key>
+						<string></string>
+						<key>outputlabel</key>
+						<string>has input</string>
+						<key>uid</key>
+						<string>AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>empty</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>44444444-4444-4444-8444-444444444444</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+
+		<!-- Notification (matched branch) -->
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Skeleton</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>55555555-5555-4555-8555-555555555555</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+
+		<!-- Clipboard (else branch) -->
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>66666666-6666-4666-8666-666666666666</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+	</array>
+
+	<!-- Canvas: x = 60 + 200·col, y = 60 + 150·row; branches fan ±70 from source y -->
+	<key>uidata</key>
+	<dict>
+		<key>11111111-1111-4111-8111-111111111111</key>
+		<dict>
+			<key>note</key>
+			<string>Entry point</string>
+			<key>xpos</key>
+			<real>60</real>
+			<key>ypos</key>
+			<real>60</real>
+		</dict>
+		<key>22222222-2222-4222-8222-222222222222</key>
+		<dict>
+			<key>xpos</key>
+			<real>260</real>
+			<key>ypos</key>
+			<real>60</real>
+		</dict>
+		<key>33333333-3333-4333-8333-333333333333</key>
+		<dict>
+			<key>note</key>
+			<string>Main search</string>
+			<key>xpos</key>
+			<real>460</real>
+			<key>ypos</key>
+			<real>60</real>
+		</dict>
+		<key>44444444-4444-4444-8444-444444444444</key>
+		<dict>
+			<key>xpos</key>
+			<real>660</real>
+			<key>ypos</key>
+			<real>60</real>
+		</dict>
+		<key>55555555-5555-4555-8555-555555555555</key>
+		<dict>
+			<key>xpos</key>
+			<real>860</real>
+			<key>ypos</key>
+			<real>25</real>
+		</dict>
+		<key>66666666-6666-4666-8666-666666666666</key>
+		<dict>
+			<key>xpos</key>
+			<real>860</real>
+			<key>ypos</key>
+			<real>165</real>
+		</dict>
+	</dict>
+
+	<key>userconfigurationconfig</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>skel</string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Keyword that triggers the search.</string>
+			<key>label</key>
+			<string>Keyword</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>keyword</string>
+		</dict>
+	</array>
+
+	<key>variables</key>
+	<dict/>
+</dict>
+</plist>

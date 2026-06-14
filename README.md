@@ -28,5 +28,7 @@ instead of symlinking.
 ## Available Skills
 
 <!-- catalog:start -->
-_No skills published yet._
+| Skill | Description |
+| ----- | ----------- |
+| [`alfred-workflow`](skills/alfred-workflow/) | Author Alfred 5 workflows as code by writing the native info.plist XML — object graph, connections, canvas layout (uidata), user configuration — then validating, packaging into .alfredworkflow, and installing. |
 <!-- catalog:end -->

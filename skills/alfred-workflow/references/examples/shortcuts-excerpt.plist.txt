@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EXCERPT: alfredapp/shortcuts-workflow Workflow/info.plist -->
+<!-- SOURCE: https://github.com/alfredapp/shortcuts-workflow/blob/main/Workflow/info.plist -->
+<!-- Shows: conditional w/ multiple outputs + sourceoutputuid, automation.task, split utility, json utility -->
+
+<!-- === CONDITIONAL with multiple outputs and sourceoutputuid === -->
+<!-- In connections, sourceoutputuid identifies WHICH output of a conditional routes to a destination: -->
+<!--   54C3747A connections:
+       - destinationuid: 72481DFD, sourceoutputuid: 756F0559-8EAD... (outputlabel: "Paths")
+       - destinationuid: 176F2785, sourceoutputuid: 05992BB6-2B0A... (outputlabel: "Arguments")
+       - destinationuid: 1128D030 (no sourceoutputuid = "else" / No Input output)
+-->
+<dict>
+	<key>config</key>
+	<dict>
+		<key>conditions</key>
+		<array>
+			<dict>
+				<key>inputstring</key>
+				<string>{var:input_paths}</string>
+				<key>matchcasesensitive</key>
+				<false/>
+				<key>matchmode</key>
+				<integer>1</integer>
+				<!-- matchmode 1 = "is not empty" / "contains" -->
+				<key>matchstring</key>
+				<string></string>
+				<key>outputlabel</key>
+				<string>Paths</string>
+				<key>uid</key>
+				<string>756F0559-8EAD-4114-839C-92C1EA776DFF</string>
+			</dict>
+			<dict>
+				<key>inputstring</key>
+				<string>{var:argument}</string>
+				<key>matchcasesensitive</key>
+				<false/>
+				<key>matchmode</key>
+				<integer>1</integer>
+				<key>matchstring</key>
+				<string></string>
+				<key>outputlabel</key>
+				<string>Arguments</string>
+				<key>uid</key>
+				<string>05992BB6-2B0A-4367-885F-0CF4FCDED305</string>
+			</dict>
+		</array>
+		<key>elselabel</key>
+		<string>No Input</string>
+		<key>hideelse</key>
+		<false/>
+	</dict>
+	<key>type</key>
+	<string>alfred.workflow.utility.conditional</string>
+	<key>uid</key>
+	<string>54C3747A-A884-4018-BAD0-8D3926DDBCE9</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+
+<!-- === AUTOMATION TASK (Alfred 5) === -->
+<dict>
+	<key>config</key>
+	<dict>
+		<key>tasksettings</key>
+		<dict>
+			<key>target_shortcut</key>
+			<string>{var:shortcut}</string>
+		</dict>
+		<key>taskuid</key>
+		<string>com.alfredapp.automation.core/shortcuts/shortcut.view</string>
+	</dict>
+	<key>type</key>
+	<string>alfred.workflow.automation.task</string>
+	<key>uid</key>
+	<string>CF364E2A-1603-41C0-8A74-CFF9ADC072F7</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+
+<!-- === SPLIT UTILITY === -->
+<dict>
+	<key>config</key>
+	<dict>
+		<key>delimiter</key>
+		<string>	</string>
+		<key>discardemptyarguments</key>
+		<false/>
+		<key>outputas</key>
+		<integer>1</integer>
+		<key>trimarguments</key>
+		<true/>
+		<key>variableprefix</key>
+		<string>split</string>
+	</dict>
+	<key>type</key>
+	<string>alfred.workflow.utility.split</string>
+	<key>uid</key>
+	<string>566F4FB1-471E-4356-AF50-6A47EBC49EC5</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+
+<!-- === JSON UTILITY (set variables from JSON) === -->
+<dict>
+	<key>config</key>
+	<dict>
+		<key>json</key>
+		<string>{
+  "alfredworkflow" : {
+    "arg" : "{query}",
+    "config" : {
+      "inputmode" : "{var:inputmode}",
+      "shortcut" : "{var:shortcut}",
+      "outputmode" : 0
+    }
+  }
+}</string>
+	</dict>
+	<key>type</key>
+	<string>alfred.workflow.utility.json</string>
+	<key>uid</key>
+	<string>SOME-UUID-XXXX</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+
+<!-- === SCRIPTFILTER with type=7 (JXA) === -->
+<dict>
+	<key>config</key>
+	<dict>
+		<key>alfredfiltersresults</key>
+		<true/>
+		<key>alfredfiltersresultsmatchmode</key>
+		<integer>2</integer>
+		<key>argumenttreatemptyqueryasnil</key>
+		<true/>
+		<key>argumenttrimmode</key>
+		<integer>0</integer>
+		<key>argumenttype</key>
+		<integer>1</integer>
+		<key>escaping</key>
+		<integer>102</integer>
+		<key>queuedelaycustom</key>
+		<integer>3</integer>
+		<key>queuedelayimmediatelyinitially</key>
+		<true/>
+		<key>queuedelaymode</key>
+		<integer>0</integer>
+		<key>queuemode</key>
+		<integer>1</integer>
+		<key>runningsubtext</key>
+		<string>Getting shortcuts…</string>
+		<key>script</key>
+		<string>// JXA script here - type 7 = JXA</string>
+		<key>scriptargtype</key>
+		<integer>1</integer>
+		<key>scriptfile</key>
+		<string></string>
+		<key>skipuniversalaction</key>
+		<true/>
+		<key>subtext</key>
+		<string>List shortcuts with input</string>
+		<key>title</key>
+		<string>Shortcuts with Input</string>
+		<key>type</key>
+		<integer>7</integer>
+		<key>withspace</key>
+		<false/>
+	</dict>
+	<key>type</key>
+	<string>alfred.workflow.input.scriptfilter</string>
+	<key>uid</key>
+	<string>0D5E4A1D-7A46-4307-9E01-471A03ACA51A</string>
+	<key>version</key>
+	<integer>3</integer>
+</dict>
+
+<!-- === UIDATA for shortcuts workflow === -->
+<!--
+Key layout observations from this workflow:
+- Starting objects: x=75, y=90,255,420,585 (Δy=165 for independent chains)
+- Column 2: x=255, y=90-450
+- Column 3: x=425, y=90-255 (Δy=165)
+- Column 4: x=655-695, y=170-420
+- Column 5: x=835-945, y=95-285
+- Column 6: x=1095, y=50-190 (Δy=70 for closely related paths)
+- Column 7: x=1185-1275, y=50-120
+- Column 8: x=1370, y=90
+-->
+<key>uidata</key>
+<dict>
+	<key>8AD8B6B2-7CFD-4111-B81C-69158A3E4D4C</key>
+	<dict>
+		<key>note</key>
+		<string>Prepare argument to run shortcut</string>
+		<key>xpos</key>
+		<real>75</real>
+		<key>ypos</key>
+		<real>90</real>
+	</dict>
+	<key>B6B11028-3EFA-4B12-A13A-D2E45B31EEDB</key>
+	<dict>
+		<key>note</key>
+		<string>Prepare path to run shortcut</string>
+		<key>xpos</key>
+		<real>75</real>
+		<key>ypos</key>
+		<real>255</real>
+	</dict>
+	<key>4CA0F7EA-3AF3-48FB-9F9A-AEF9797EDC3B</key>
+	<dict>
+		<key>note</key>
+		<string>List shortcuts by folder name</string>
+		<key>xpos</key>
+		<real>75</real>
+		<key>ypos</key>
+		<real>420</real>
+	</dict>
+	<key>1C952188-0253-48CC-A123-97E3EA3DC504</key>
+	<dict>
+		<key>note</key>
+		<string>List all shortcuts</string>
+		<key>xpos</key>
+		<real>75</real>
+		<key>ypos</key>
+		<real>585</real>
+	</dict>
+	<key>1DFB80A0-3BC8-4D10-B25F-5738F65D531B</key>
+	<dict>
+		<key>note</key>
+		<string>Set argument variable</string>
+		<key>xpos</key>
+		<real>255</real>
+		<key>ypos</key>
+		<real>120</real>
+	</dict>
+	<key>0D5E4A1D-7A46-4307-9E01-471A03ACA51A</key>
+	<dict>
+		<key>note</key>
+		<string>List shortcuts which accept input</string>
+		<key>xpos</key>
+		<real>425</real>
+		<key>ypos</key>
+		<real>90</real>
+	</dict>
+	<key>54C3747A-A884-4018-BAD0-8D3926DDBCE9</key>
+	<dict>
+		<key>xpos</key>
+		<real>945</real>
+		<key>ypos</key>
+		<real>95</real>
+	</dict>
+	<key>72481DFD-5DA2-4A5C-A453-FF8E93304DD5</key>
+	<dict>
+		<key>xpos</key>
+		<real>1095</real>
+		<key>ypos</key>
+		<real>50</real>
+	</dict>
+	<key>176F2785-CF64-434B-BA5E-B1C8896D5C01</key>
+	<dict>
+		<key>xpos</key>
+		<real>1095</real>
+		<key>ypos</key>
+		<real>120</real>
+	</dict>
+	<key>1128D030-5A3C-43C0-8B79-84EE063E2F1C</key>
+	<dict>
+		<key>xpos</key>
+		<real>1095</real>
+		<key>ypos</key>
+		<real>190</real>
+	</dict>
+	<key>BFCDF55C-5BEF-4517-BDCB-4561FFAEA81B</key>
+	<dict>
+		<key>xpos</key>
+		<real>1370</real>
+		<key>ypos</key>
+		<real>90</real>
+	</dict>
+</dict>
+
+<!-- === USERCONFIGURATIONCONFIG === -->
+<key>userconfigurationconfig</key>
+<array>
+	<dict>
+		<key>config</key>
+		<dict>
+			<key>default</key>
+			<string>sc</string>
+			<key>placeholder</key>
+			<string></string>
+			<key>required</key>
+			<false/>
+			<key>trim</key>
+			<true/>
+		</dict>
+		<key>description</key>
+		<string></string>
+		<key>label</key>
+		<string>All Shortcuts Keyword</string>
+		<key>type</key>
+		<string>textfield</string>
+		<key>variable</key>
+		<string>all_shortcuts_keyword</string>
+	</dict>
+	<dict>
+		<key>config</key>
+		<dict>
+			<key>default</key>
+			<string></string>
+			<key>required</key>
+			<false/>
+			<key>trim</key>
+			<true/>
+			<key>verticalsize</key>
+			<integer>6</integer>
+		</dict>
+		<key>description</key>
+		<string>Newline-separared list of folders to hide in lists.</string>
+		<key>label</key>
+		<string>Ignored Folders</string>
+		<key>type</key>
+		<string>textarea</string>
+		<key>variable</key>
+		<string>ignored_folders</string>
+	</dict>
+</array>
