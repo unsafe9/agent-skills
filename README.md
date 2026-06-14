@@ -31,4 +31,5 @@ instead of symlinking.
 | Skill | Description |
 | ----- | ----------- |
 | [`alfred-workflow`](alfred-workflow/) | Author Alfred 5 workflows as code by writing the native info.plist XML — object graph, connections, canvas layout (uidata), user configuration — then validating, packaging into .alfredworkflow, and installing. |
+| [`instruction`](instruction/) | Write, edit, or review durable agent instructions so they read well to a fresh agent at startup. |
 <!-- catalog:end -->
