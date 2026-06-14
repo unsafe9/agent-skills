@@ -33,4 +33,5 @@ instead of symlinking.
 | [`alfred-workflow`](alfred-workflow/) | Author Alfred 5 workflows as code by writing the native info.plist XML — object graph, connections, canvas layout (uidata), user configuration — then validating, packaging into .alfredworkflow, and installing. |
 | [`generate-image`](generate-image/) | Generate images from a text prompt using OpenAI's gpt-image-2 (default) or Google Gemini (Nano Banana) and open them in the system image viewer. |
 | [`instruction`](instruction/) | Write, edit, or review durable agent instructions so they read well to a fresh agent at startup. |
+| [`rescue`](rescue/) | Delegate substantial work to an external AI CLI — Claude Code (`claude`), Codex (`codex`), or Gemini/Antigravity (`agy`) — for a second opinion, deeper root-cause investigation, implementation rescue, or a large handoff; or run all three in parallel and synthesize a consensus. |
 <!-- catalog:end -->
