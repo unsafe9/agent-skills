@@ -21,10 +21,13 @@ SCRIPT_OBJECT_TYPES = {"alfred.workflow.input.scriptfilter", "alfred.workflow.ac
 # Approximate Alfred 5 canvas footprints (px), anchored at uidata xpos/ypos and
 # extending right/down. Overlap = a true AABB intersection of these boxes, so the
 # recommended grid (x+200 / y+150, layout.md) clears every pair while bunched or
-# tucked-in nodes intersect and get flagged. Sizes calibrated to a 5.7.3 canvas:
-# a tile is the icon + title (taller than the old 90×60 guess), a `note` adds a row,
-# automation/hexagon objects render ~3x taller, and a Conditional grows per output.
-STD_W, STD_H = 150, 110
+# tucked-in nodes intersect and get flagged. Sizes calibrated against GUI-saved
+# 5.7.3 workflows — e.g. the bundled magic-8-ball packs adjacent columns ~125px
+# apart with no visual overlap, so a tile is narrower than its grid step: icon +
+# title, a `note` adds a row, automation/hexagon objects render ~3x taller, and a
+# Conditional grows per output. layout.md's grid is the readability recommendation;
+# this check is only the true-overlap floor and passes the tighter real layouts too.
+STD_W, STD_H = 120, 110
 NOTE_H = 35
 LARGE_W, LARGE_H = 180, 190
 JUNCTION_W, JUNCTION_H = 70, 60

@@ -26,7 +26,7 @@ Every object needs an entry; an object without one lands at (0,0) on top of othe
 
 Footprints differ by object type (these are what the bundled validator checks for
 true overlaps, so honor them):
-- **Standard object** (icon + title): ≈150×110 px. A `note` adds a label row, ≈+35 px.
+- **Standard object** (icon + title): ≈120×110 px. A `note` adds a label row, ≈+35 px.
 - **Automation / hexagon tiles** — Automation Task, Run Shortcut, System Command,
   Music Command — render ≈180×190 px (about 3× taller).
 - **Conditional** grows with outputs: ≈90 + 50·(conditions + else). A 2-branch
@@ -50,11 +50,13 @@ Place objects on this grid:
    coordinates render fine — if a fan climbs above y≈−100, move the whole chain down.
 5. **Merges** (several edges into one node): place the destination at the average y of
    its sources, snapped to the grid.
-6. **Never overlap.** The validator models each object's footprint (above) and flags any
-   true box intersection — so two nodes in the same column need |Δy| ≥ their height
-   (≈120 plain, ≈150 with a note, ≈200 for an Automation/hexagon tile), and a shared
-   row needs |Δx| ≥ 180. This applies to *every* node, including ones whose icon looks
-   small:
+6. **Never overlap.** The validator flags any true intersection of the footprints
+   above — two nodes in one column collide unless |Δy| ≥ their height (≈110 plain,
+   ≈145 with a note, ≈190 for an Automation/hexagon tile); two in one row collide
+   unless |Δx| ≥ their width (≈120, ≈180 for a hexagon tile). That is only the floor;
+   the recommended grid (Δx 200 / Δy 150) clears it with margin, so stay on the grid
+   for readability rather than hugging the minimum. This applies to *every* node,
+   including ones whose icon looks small:
    - **A Junction occupies a full column slot.** Never tuck it inside a neighbor's
      column between two nodes — its small icon still collides with the big tile around
      it. Give it its own x (Δx ≥ 180 from both sides).

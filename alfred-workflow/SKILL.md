@@ -1,6 +1,6 @@
 ---
 name: alfred-workflow
-description: Author Alfred 5 workflows as code by writing the native info.plist XML — object graph, connections, canvas layout (uidata), user configuration — then validating, packaging into .alfredworkflow, and installing. Use whenever the user wants to create, modify, lay out, debug, package, or install an Alfred workflow or macOS launcher automation, mentions .alfredworkflow, Script Filter, Alfred keyword/hotkey/external trigger, or says 'alfred 워크플로우 만들어줘', '알프레드 워크플로우 수정/설치', 'build an Alfred workflow', 'add an Alfred keyword'. Trigger even when the user only describes the desired launcher behavior without naming Alfred internals.
+description: Author Alfred 5 workflows as code by writing the native info.plist XML — object graph, connections, canvas layout (uidata), user configuration — then validating, packaging into .alfredworkflow, and installing. Use whenever the user wants to create, modify, lay out, debug, package, or install an Alfred workflow or macOS launcher automation, mentions .alfredworkflow, Script Filter, Alfred keyword/hotkey/external trigger, or says 'build an Alfred workflow', 'add an Alfred keyword'. Trigger even when the user only describes the desired launcher behavior without naming Alfred internals.
 ---
 
 # Alfred Workflow Authoring
@@ -93,7 +93,7 @@ misbehaves:
 | `references/ux-and-performance.md` | Designing the interaction — live previews, forgiving input formats, item icons, caching, parallel fetch, rerun stability |
 | `references/config-and-variables.md` | User Configuration fields, variable scopes, runtime env vars |
 | `references/packaging.md` | Packing, installing, reloading, debugging, distributing |
-| `references/examples/` | Real info.plist files from official/popular workflows — copy shapes from here when unsure |
+| `references/examples/` | Reference info.plist files — official/popular workflow exports plus one complete validated example — copy shapes from here when unsure |
 
 Every object's exact `type` string is in the type index at the top of
 `references/objects.md` — look it up there, never guess (a wrong string is silently

@@ -22,7 +22,7 @@
 				<false/>
 				<key>matchmode</key>
 				<integer>1</integer>
-				<!-- matchmode 1 = "is not empty" / "contains" -->
+				<!-- matchmode 1 = "is not empty" (see objects.md Conditional) -->
 				<key>matchstring</key>
 				<string></string>
 				<key>outputlabel</key>
