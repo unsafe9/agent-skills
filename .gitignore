@@ -1,0 +1,9 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+
+# skills CLI runtime state
+skills-lock.json
+.skill-lock.json
