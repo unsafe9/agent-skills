@@ -1,9 +1,9 @@
 # agent-skills
 
-A curated collection of agent skills by [unsafe9](https://github.com/unsafe9),
-hand-picked from a personal skill workbench and published here for external sharing.
+Agent skills I built and use myself, shared here for anyone who finds them useful.
+Each skill lives in its own top-level directory.
 
-Skills are kept tool/host-neutral where possible, so they work across agent hosts
+They're kept tool/host-neutral where possible, so they work across agent hosts
 (Claude Code, Codex, and other [skills CLI](https://github.com/vercel-labs/skills)-compatible agents).
 
 ## Install
@@ -30,5 +30,5 @@ instead of symlinking.
 <!-- catalog:start -->
 | Skill | Description |
 | ----- | ----------- |
-| [`alfred-workflow`](skills/alfred-workflow/) | Author Alfred 5 workflows as code by writing the native info.plist XML — object graph, connections, canvas layout (uidata), user configuration — then validating, packaging into .alfredworkflow, and installing. |
+| [`alfred-workflow`](alfred-workflow/) | Author Alfred 5 workflows as code by writing the native info.plist XML — object graph, connections, canvas layout (uidata), user configuration — then validating, packaging into .alfredworkflow, and installing. |
 <!-- catalog:end -->
