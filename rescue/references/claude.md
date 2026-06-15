@@ -26,11 +26,17 @@ Strip these from the prompt body and translate them:
 | --- | --- |
 | `--resume` | Append `-c` (resume the most recent conversation in the current directory). |
 | `--conversation <id>` | Append `--resume <id>`. |
-| `--fresh` | Start a new persisted print-mode session; add neither `-c` nor `--resume`. |
+| `--fresh` | Start a new print-mode session; add neither `-c` nor `--resume`. |
 
 If no session flag is present and the request is clearly a follow-up ("continue",
 "keep going", "resume", "apply the top fix", "dig deeper"), add `-c`. Otherwise
 start fresh.
+
+A fresh run is **ephemeral by default**: also append `--no-session-persistence`
+(print-mode only — it keeps the session from being written to disk, so a one-off
+rescue leaves nothing to resume). Omit it only when the caller passed `--persist` to
+keep the fresh session resumable. A resumed run (`-c` / `--resume <id>`) operates on a
+saved session, so never add `--no-session-persistence` there.
 
 ## Runtime flags
 

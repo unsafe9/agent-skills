@@ -1,7 +1,7 @@
 ---
 name: rescue
-description: "Delegate substantial work to an external AI CLI — Claude Code (`claude`), Codex (`codex`), or Gemini/Antigravity (`agy`) — for a second opinion, deeper root-cause investigation, implementation rescue, or a large handoff; or run all three in parallel and synthesize a consensus. Use this skill whenever the current agent is stuck, wants an independent pass or a second model, needs deeper investigation, should hand off a substantial coding or diagnosis task, or the user asks for 'rescue', 'second opinion', 'second model', names a backend (claude, claude-rescue, codex, codex-rescue, spark, gemini, gemini-rescue, agy, antigravity), or — for multiple perspectives — says 'consensus', 'ask other agents', 'get multiple perspectives', 'what do others think', 'validate this approach', 'validate this decision'. Naming exactly one backend routes to it; anything else, including a bare 'rescue', runs the 3-way consensus."
-argument-hint: [claude|codex|gemini|consensus] [--background|--wait] [--resume|--fresh|--conversation <id>] [--model <model>] [--effort <level>] [--add-dir <path>] [what to investigate, solve, or continue]
+description: "Run an external AI model on your task and bring its answer back into this conversation — Claude Code (`claude`), Codex (`codex`), or Gemini/Antigravity (`agy`) for a second opinion, a second model, deeper root-cause investigation, or substantial coding/diagnosis help, with the result returned here; or run all three in parallel and synthesize a consensus. The work happens elsewhere but the output comes back to you. Use whenever the current agent is stuck, wants an independent pass or a second model, needs deeper investigation, or wants another model to do a substantial coding or diagnosis task and report back. Triggers on 'rescue', 'second opinion', 'second model', a named backend (claude, claude-rescue, codex, codex-rescue, spark, gemini, gemini-rescue, agy, antigravity), or — for multiple perspectives — 'consensus', 'ask other agents', 'get multiple perspectives', 'what do others think', 'validate this approach', 'validate this decision'. Naming exactly one backend routes to it; anything else, including a bare 'rescue', runs the 3-way consensus."
+argument-hint: [claude|codex|gemini|consensus] [--background|--wait] [--resume|--fresh|--conversation <id>] [--persist] [--model <model>] [--effort <level>] [--add-dir <path>] [what to investigate, solve, or continue]
 ---
 
 # Rescue
@@ -25,6 +25,17 @@ host system, so for the host backend it reasons **natively** — no CLI subproce
 other two backends are reached only through their CLIs, per their reference files.
 This keeps the skill host-neutral: whichever system you run under is the native
 perspective, and the other two are the external ones.
+
+### Context to carry
+
+Every backend you spawn — native subagent or CLI forwarder — starts with none of this
+conversation's context. It sees only the task text you forward plus whatever it reads
+from the repo itself. So before forwarding, fold the parts that live only in this
+conversation — findings so far, decisions made, ruled-out paths, constraints, and the
+file or path pointers that matter — into the task text. This is not repo investigation
+(the backend does that itself); it is transferring what this conversation already
+knows. Consensus adds to this: it may also read referenced files and embed their
+content, since each analyst evaluates a self-contained question.
 
 Resolve `{{SKILL_DIR}}` to this skill's directory before pointing a subagent at a
 reference file.
@@ -80,6 +91,12 @@ resulting flags into the CLI invocation.
   this backend in the conversation, ask once whether to continue that run or start
   fresh.
 - Otherwise add `--fresh`.
+- A `--fresh` run is **ephemeral by default** — the reference adds the CLI's
+  no-persist flag where one exists, so a one-off rescue leaves no resumable session
+  on disk. Keep the session only when the user passes `--persist` (a fresh run they
+  intend to continue later). `--resume`/`--conversation` operate on an existing saved
+  session and are never ephemeral. The native host backend creates no separate CLI
+  session, so this applies only to CLI forwarders.
 
 ### Capability
 

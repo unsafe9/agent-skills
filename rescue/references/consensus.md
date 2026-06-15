@@ -21,14 +21,16 @@ their CLIs.
 
 All three are analysts, not implementers: their prompts tell them to investigate and
 report only. They run in default mode — read code, search, run checks — but make no
-edits.
+edits. Each is a one-off fresh pass, so the CLI forwarders run **ephemeral** per their
+reference's no-persist default (`claude --no-session-persistence`, `codex --ephemeral`;
+`agy` has no such flag) — consensus never leaves resumable analyst sessions behind.
 
 ## Step 1 — Formulate the question
 
-Turn the request into a clear, self-contained question or proposal. Each perspective
-starts with zero shared state, so the prompt must carry all needed context. If the
-request references files or code, read the relevant content first and embed it in the
-prompt — the CLI-backed perspectives only see what you put in the prompt.
+Turn the request into a clear, self-contained question or proposal. Beyond the
+conversation context every spawn carries (see SKILL.md, "Context to carry"), consensus
+has one addition: if the request references files or code, read the relevant content
+first and embed it in the prompt — each analyst sees only what you put in the prompt.
 
 ## Step 2 — Assign stances
 

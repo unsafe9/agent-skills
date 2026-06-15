@@ -1,9 +1,9 @@
 # rescue
 
-Delegate substantial work to an external AI CLI — Claude Code (`claude`), Codex
-(`codex`), or Gemini/Antigravity (`agy`) — for a second opinion, deeper
-investigation, implementation rescue, or a large handoff; or run all three in
-parallel and synthesize a consensus.
+Run an external AI model on your task and bring its answer back into this
+conversation — Claude Code (`claude`), Codex (`codex`), or Gemini/Antigravity
+(`agy`) — for a second opinion, deeper investigation, implementation rescue, or a
+large handoff; or run all three in parallel and synthesize a consensus.
 
 ## How it works
 
@@ -35,10 +35,18 @@ Invoke with an optional backend and flags, then the task:
 
 ```
 [claude|codex|gemini|consensus] [--background|--wait]
-[--resume|--fresh|--conversation <id>] [--model <model>] [--effort <level>]
-[--add-dir <path>] [what to investigate, solve, or continue]
+[--resume|--fresh|--conversation <id>] [--persist] [--model <model>]
+[--effort <level>] [--add-dir <path>] [what to investigate, solve, or continue]
 ```
 
 Naming exactly one backend routes to it; anything else — including a bare
-`rescue` — runs the 3-way consensus. See `SKILL.md` for routing, session policy,
-and the consensus synthesis, and `references/` for each backend's CLI invocation.
+`rescue` — runs the 3-way consensus.
+
+A fresh single-backend run is **ephemeral by default**: where a CLI supports it,
+the session is not persisted to disk, so a one-off rescue leaves nothing to resume.
+Pass `--persist` to keep a fresh session resumable; `--resume` / `--conversation`
+continue an existing saved session. (`agy` always persists, so `--persist` is a
+no-op there.)
+
+See `SKILL.md` for routing, session policy, and the consensus synthesis, and
+`references/` for each backend's CLI invocation.

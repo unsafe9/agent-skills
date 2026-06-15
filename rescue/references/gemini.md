@@ -32,6 +32,10 @@ If no session flag is present and the request is clearly a follow-up ("continue"
 "keep going", "resume", "apply the top fix", "dig deeper"), add `-c`. Otherwise start
 fresh.
 
+A fresh run **cannot be made ephemeral**: `agy --help` exposes no no-persist or
+`--ephemeral` flag, so `agy` always saves the conversation and there is nothing to
+pass. Note this limitation rather than inventing a flag; `--persist` is a no-op here.
+
 ## Runtime flags
 
 Pass no `--dangerously-skip-permissions` flag — `agy` runs in its default mode. Strip

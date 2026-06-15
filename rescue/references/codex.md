@@ -37,6 +37,12 @@ If no session flag is present and the request is clearly a follow-up ("continue"
 "keep going", "resume", "apply the top fix", "dig deeper"), use `resume --last`.
 Otherwise start fresh.
 
+A fresh `codex exec` is **ephemeral by default**: also pass `--ephemeral` (runs
+without persisting session files to disk), so a one-off rescue leaves no resumable
+session. Omit it only when the caller passed `--persist`. A resumed run
+(`resume --last` / `resume <id>`) operates on a saved session, so never add
+`--ephemeral` there.
+
 On a resumed run, model and sandbox carry over from the prior session; pass
 adjustments as `-c` config overrides. For any resume flag not covered here, check
 `codex exec resume --help`.
