@@ -71,6 +71,10 @@ misbehaves:
 - Pass input as argv (`scriptargtype` = 1), not `{query}` (= 0): argv needs no
   escaping. Keep both `script` and `scriptfile` keys present; the unused one is an
   empty string.
+- Non-ASCII query/argv text can arrive NFD-decomposed (macOS input methods, file
+  paths), so Korean and accented matches against NFC data silently miss. Normalize
+  to NFC before comparing or searching — e.g. `unicodedata.normalize('NFC', text)`
+  in python3.
 - A Conditional's branch routing lives in the connection's `sourceoutputuid`, which
   must equal the `uid` inside the matching `config.conditions[]` entry. The edge
   without `sourceoutputuid` is the else branch.
