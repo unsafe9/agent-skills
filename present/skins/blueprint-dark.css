@@ -1,0 +1,22 @@
+/* skin: blueprint-dark — deep indigo night with a warm signal-amber accent.
+   MOOD: a planning-room blueprint after hours — cool violet-navy paper, warm
+   amber annotations. Reads as deliberate and architectural, the opposite of
+   midnight's cool-blue neutrality.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens (palette, fonts,
+   --radius) and structure-agnostic decoration. NEVER structural sizing
+   (no --maxw/--prose/--pad, no type scale, no section/.slide spacing, no
+   mode/nav/footer positioning). Loaded after base.css, before the shell. */
+:root{
+  --bg:#0f0c16; --bg2:#1a1626; --line:#312a44;
+  --fg:#f4eff8; --muted:#aaa0c0;
+  --accent:#ffb454; --good:#74e0a3; --bad:#ff7d8a;
+  --code-bg:#0a0810;
+  --radius:12px;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+/* dark skin: keep base's inverted accent band (dark text on the bright amber
+   fill — base already encodes #0b0d12 on var(--accent), which reads 11:1 here). */
+
+/* code text reads warm-paper-light on the near-black slab */
+pre code{color:#ece4f4}

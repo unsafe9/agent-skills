@@ -1,0 +1,25 @@
+/* skin: rose-noir — ink-plum gallery dark with a vivid rose accent.
+   MOOD: a darkroom or a fashion editorial after hours — near-black plum paper,
+   a single hot rose-pink signal. Reads as dramatic and confident, warm where
+   midnight is cool and where blueprint leans amber.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens (palette, fonts,
+   --radius) and structure-agnostic decoration. NEVER structural sizing
+   (no --maxw/--prose/--pad, no type scale, no section/.slide spacing, no
+   mode/nav/footer positioning). Loaded after base.css, before the shell. */
+:root{
+  --bg:#15101a; --bg2:#201826; --line:#352a40;
+  --fg:#f3eaf0; --muted:#b09cae;
+  --accent:#ff8ec8; --good:#6fe0ad; --bad:#ff6f7a;
+  --code-bg:#0d0a11;
+  --radius:14px;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+/* dark skin: keep base's inverted accent band (dark text on the bright rose
+   fill — base encodes #0b0d12 on var(--accent), which reads ~9:1 here). */
+
+/* code text reads a soft rose-tinted light on the near-black slab */
+pre code{color:#f2dcec}
+/* links: a quiet rose underline that lifts on hover */
+a{text-decoration:none; border-bottom:1px solid rgba(255,142,200,.35)}
+a:hover{border-bottom-color:var(--accent)}

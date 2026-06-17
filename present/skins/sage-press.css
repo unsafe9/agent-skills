@@ -1,0 +1,53 @@
+/* skin: sage-press — calm botanical light, sage paper with deep forest ink.
+   MOOD: a field journal in daylight — soft warm-sage paper, a deep evergreen
+   accent, serif headings. Natural and unhurried, the green counterpart to
+   warm-paper's rust and playful-light's blue.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens and
+   structure-agnostic decoration. NEVER structural sizing. Loaded after
+   base.css, before the shell — so its :root wins over base/dark tokens and the
+   shell's structural sizing still wins over everything.
+
+   Contrast: every surface keeps dark ink on a light fill; the accent band is a
+   pale sage wash with dark green text (NOT inverted white-on-accent). */
+:root{
+  --bg:#eef0e6; --bg2:#f8faf2; --line:#d4dcc6;
+  --fg:#232a20; --muted:#5f6b56;
+  --accent:#2f6b3f; --good:#2f7d4f; --bad:#b23b2e;
+  --code-bg:#e6ebdb;
+  --radius:12px;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --serif:ui-serif,Georgia,Cambria,"Times New Roman",serif;
+}
+
+/* serif headings / eyebrow — the field-journal signature (decoration, not sizing) */
+.eyebrow,.kicker{font-family:var(--serif); font-style:italic; text-transform:none; letter-spacing:.02em; font-weight:700}
+h1,h2,h3{font-family:var(--serif); font-weight:700}
+.card h3{font-family:var(--serif)}
+thead th{font-family:var(--serif); font-weight:700; text-transform:none; letter-spacing:.02em}
+tbody th{font-family:var(--serif); font-weight:700}
+.stat .n{font-family:var(--serif)}
+.quote,blockquote{font-family:var(--serif)}
+.quote cite,blockquote cite{font-style:italic; font-family:var(--font)}
+.option b{font-family:var(--serif)}
+.tldr p strong{font-family:var(--serif)}
+
+/* sage-press accent band: pale sage wash, dark green ink — NOT inverted.
+   Overrides base's dark-text-on-bright-accent so contrast holds on light. */
+.band--accent{background:linear-gradient(135deg, #dfe9d8, #eef3e6); color:var(--fg)}
+.band--accent .eyebrow,.band--accent .kicker{color:#285c34; opacity:1}
+.band--accent h2,.band--accent .quote,.band--accent blockquote{color:var(--fg)}
+.band--accent p,.band--accent li{color:var(--fg); opacity:1}
+.band--accent .lead,.band--accent .quote cite,.band--accent blockquote cite{color:var(--muted); opacity:1}
+.band--accent .stat .l{color:var(--muted); opacity:1}
+
+/* dark code text on the light sage slab */
+pre code{color:#2a3024}
+.cmt{color:var(--muted)} .key{color:var(--accent)} .str{color:var(--good)}
+
+/* composer button: light label on the deep forest fill */
+#copy-btn{color:#f8faf2}
+
+/* links: a sage-friendly underline */
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(47,107,63,.4)}
+a:hover{border-bottom-color:var(--accent)}

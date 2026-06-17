@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparison</title>
+
+<!-- 1) base cosmetics THEN skin decoration. Skin :root wins over base :root. -->
+<style>{{CSS}}</style>
+
+<!-- 2) STRUCTURAL CSS for the compare verdict-visualization canvas — the encoded
+     candidate x criterion matrix (Harvey-ball / heat / win-ring cells, sticky candidate
+     headers + sticky criterion gutter), plus the companion radar (profile shapes) and
+     weighted scorecard (ranked winner). This is the COMBINED verdict canvas a scroll
+     table cannot assemble. Loaded LAST so structural sizing wins over the skin and is
+     immune to reskinning. The whole canvas lives in the authored fragment; this block
+     only sizes it. -->
+<style>
+  html{scroll-behavior:smooth}
+  body{margin:0; line-height:1.5}
+
+  .matrix{max-width:min(1320px,96vw); margin:0 auto; padding:clamp(1.2rem,4vw,3rem)}
+
+  /* header block — document-grade type scale */
+  .cmp-head{margin-bottom:clamp(1.2rem,3vh,2rem)}
+  .cmp-head h1{font-size:clamp(1.7rem,3.4vw,2.6rem); line-height:1.12; letter-spacing:-.02em; margin:0; font-weight:760}
+  .cmp-head .lead{font-size:clamp(1.05rem,1.5vw,1.3rem); line-height:1.45; margin:.6rem 0 0; max-width:60ch}
+
+  /* THE GRID — gutter track + N equal candidate columns derived from --cands */
+  .cmp-grid{display:grid; grid-template-columns:minmax(8rem,12rem) repeat(var(--cands), minmax(0,1fr)); gap:0}
+
+  /* sticky candidate headers (top) + sticky criterion gutter (left); corner pins both */
+  .cmp-corner,.cand{position:sticky; top:0; z-index:3; background:var(--bg)}
+  .crit{position:sticky; left:0; z-index:2; background:var(--bg)}
+  .cmp-corner{left:0; z-index:4}
+
+  .cmp-corner{border-bottom:2px solid var(--line); border-right:2px solid var(--line)}
+  .cand{padding:.9rem 1rem; border-bottom:2px solid var(--line); border-left:1px solid var(--line)}
+  .cand h2{margin:0; font-size:clamp(1.05rem,1.7vw,1.35rem); font-weight:720; letter-spacing:-.01em}
+  .cand .cand-sub{margin:.2rem 0 0; color:var(--muted); font-size:.9rem}
+  .cand--lead{background:color-mix(in srgb,var(--accent) 9%,var(--bg))}
+  .cand--lead h2::after{content:" · my lean"; color:var(--accent); font-size:.7em; font-weight:600; letter-spacing:.04em; text-transform:uppercase}
+
+  /* criterion gutter labels — name + optional weight badge */
+  .crit{padding:.9rem 1rem; font-weight:680; border-bottom:1px solid var(--line); border-right:2px solid var(--line);
+    display:flex; flex-direction:column; justify-content:center; gap:.15rem; font-size:1rem}
+  .crit .wt{font-size:.74rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.04em}
+
+  /* matrix cells — each criterion's N cells share the implicit row, height = tallest cell.
+     The encoded cell leads with a Harvey ball / verdict chip so the row scans by pattern. */
+  .cell{padding:.85rem 1rem; border-bottom:1px solid var(--line); border-left:1px solid var(--line); min-width:0}
+  .cell .cell-top{display:flex; align-items:center; gap:.5rem; margin-bottom:.35rem}
+  .cell .rate{width:1.25rem; height:1.25rem; flex:0 0 auto}
+  .cell .verdict{display:inline-block; font-size:.78rem; letter-spacing:.04em}
+  .cell p{margin:0; font-size:.96rem; line-height:1.42; color:var(--muted); overflow-wrap:anywhere}
+
+  /* column focus/dim — engine adds .cmp-dim to off-column cells/headers */
+  .cmp-dim{opacity:.32; transition:opacity .2s}
+
+  /* clickable candidate headers (focus toggle) */
+  .cand{cursor:pointer}
+  .cand:hover h2{color:var(--accent)}
+
+  /* pick row — per-candidate option buttons under each column */
+  .crit--pick{font-weight:720}
+  .cell--pick{display:flex; padding:.7rem .7rem}
+  .cell--pick .option{padding:.7rem .9rem; font-size:.95rem; width:100%}
+  .cell--pick .option b{font-size:1rem}
+
+  /* COMPANION PANELS — the radar (tradeoff shape) + scorecard (ranked verdict)
+     sit side by side under the matrix; this is the visualization a table can't do */
+  .cmp-panels{display:grid; grid-template-columns:1fr 1fr; gap:clamp(1rem,2.5vw,1.8rem);
+    margin-top:clamp(1.4rem,3.5vh,2.4rem)}
+  .cmp-panel{background:var(--bg2); border:1px solid var(--line); border-radius:var(--radius);
+    padding:clamp(1rem,2.2vw,1.5rem); min-width:0}
+  .cmp-panel > h2{margin:0 0 .2rem; font-size:1.15rem; font-weight:720; letter-spacing:-.01em}
+  .cmp-panel > .sub{display:block; color:var(--muted); font-size:.88rem; margin-bottom:.9rem}
+
+  /* radar sizing — viewBox SVG scales to the panel, never scrolls */
+  .radar{max-width:30rem; margin:0 auto}
+  .radar .axis-l{font-size:13px}
+  .radar .blob-dot{r:3.5}
+  /* radar legend (reuses .legend / .swatch cosmetics from base) */
+  .cmp-panel .legend{gap:.4rem 1.1rem; margin-top:.7rem; font-size:.86rem}
+  .cmp-panel .legend span{gap:.4rem}
+  .cmp-panel .swatch{width:.85rem; height:.85rem}
+
+  /* scorecard sizing — the bar tracks + tabular totals */
+  .scored{gap:.7rem}
+  .scored .sc-row{padding:.15rem 0}
+  .scored .sc-name b{font-size:1rem} .scored .sc-name span{display:block; font-size:.82rem}
+  .scored .sc-track{height:.9rem; width:100%; margin-top:.35rem}
+  .scored .sc-total{font-size:1.2rem; min-width:2.8ch; text-align:right}
+  .scored .sc-foot{margin:.7rem 0 0; color:var(--muted); font-size:.84rem}
+
+  /* composer — copied sizing from scroll's pattern */
+  #composer{margin-top:clamp(1.6rem,4vh,2.6rem); border-top:1px solid var(--line); background:var(--bg2);
+    border-radius:var(--radius); padding:clamp(1.2rem,3vh,1.8rem); display:flex; flex-direction:column; gap:.9rem}
+  #prompt-preview{padding:1rem 1.2rem; font-size:1.08rem; line-height:1.5}
+  #copy-btn{align-self:flex-start; padding:.8rem 1.5rem; font-size:1.05rem}
+
+  /* narrow viewports: drop sticky + grid, stack candidates + panels vertically (no horizontal scroll) */
+  @media(max-width:820px){
+    .cmp-panels{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .cmp-grid{grid-template-columns:1fr}
+    .cmp-corner{display:none}
+    .cand,.crit,.cell{position:static; border-left:0}
+    .crit{border-top:2px solid var(--line); border-right:0}
+    .cell{border-bottom:1px solid var(--line)}
+    .cell--pick{border-bottom:0}
+  }
+</style>
+</head>
+<body>
+
+{{BODY}}
+
+<script>{{JS}}</script>
+</body>
+</html>

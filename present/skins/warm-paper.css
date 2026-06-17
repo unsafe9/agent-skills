@@ -1,0 +1,49 @@
+/* skin: warm-paper — light, warm editorial paper. Serif headings over a sans body.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens and
+   structure-agnostic decoration. NEVER structural sizing. Loaded after
+   base.css, before the shell — so its :root wins over base/midnight tokens and
+   the shell's structural sizing still wins over everything.
+
+   Contrast: every surface keeps dark ink on a light fill; the accent band is a
+   pale paper wash with dark text (NOT inverted white-on-accent). */
+:root{
+  --bg:#f4f1ea; --bg2:#fbf9f4; --line:#ddd6c8;
+  --fg:#26221b; --muted:#6f685a;
+  --accent:#ad4d1b; --good:#3f7d4f; --bad:#b23b2e;
+  --code-bg:#ece7dc;
+  --radius:14px;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --serif:ui-serif,Georgia,Cambria,"Times New Roman",serif;
+}
+
+/* serif headings / eyebrow / quote — the editorial signature (decoration, not sizing) */
+.eyebrow,.kicker{font-family:var(--serif); font-style:italic; text-transform:none; letter-spacing:.02em; font-weight:700}
+h1,h2,h3{font-family:var(--serif); font-weight:700}
+.card h3{font-family:var(--serif)}
+thead th{font-family:var(--serif); font-weight:700; text-transform:none; letter-spacing:.02em}
+tbody th{font-family:var(--serif); font-weight:700}
+.stat .n{font-family:var(--serif)}
+.quote,blockquote{font-family:var(--serif)}
+.quote cite,blockquote cite{font-style:italic; font-family:var(--font)}
+.option b{font-family:var(--serif)}
+.tldr p strong{font-family:var(--serif)}
+
+/* warm-paper accent band: pale wash, dark serif — NOT inverted. Overrides base's
+   dark-text-on-bright-accent treatment so contrast holds on the light palette. */
+.band--accent{background:linear-gradient(135deg, #efe6d4, #f7f2e7); color:var(--fg)}
+.band--accent .eyebrow,.band--accent .kicker{color:#9a4012; opacity:1}
+.band--accent h2,.band--accent .quote,.band--accent blockquote{color:var(--fg)}
+.band--accent p,.band--accent li{color:var(--fg); opacity:1}
+.band--accent .lead,.band--accent .quote cite,.band--accent blockquote cite{color:var(--muted); opacity:1}
+.band--accent .stat .l{color:var(--muted); opacity:1}
+
+/* dark code text on the light paper slab */
+pre code{color:#3a342a}
+
+/* composer button: light label on the warm accent fill */
+#copy-btn{color:#fbf9f4}
+
+/* links: paper-friendly underline */
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(180,84,31,.35)}
+a:hover{border-bottom-color:var(--accent)}

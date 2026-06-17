@@ -1,0 +1,113 @@
+<!-- cheatsheet STYLE · CLI quick-reference pattern.
+     A dense reference card, scanned not read: a compact header + .scope, then a
+     .sheet pouring .group topic cards down the columns. Most-used topics first;
+     each group is kept whole by break-inside:avoid, so split a big topic into two
+     groups rather than one tall card. .cmds for commands, .defs for term->meaning,
+     .keys for keystrokes, a .hint for the one nuance under a group. No hero, no
+     TL;DR. Assemble:
+     build.py --style cheatsheet --body examples/git.body.html -->
+<main class="page">
+  <header>
+    <h1>Git quick reference</h1>
+    <p class="scope">covers <b>everyday branch, commit, history, and recovery commands</b> — porcelain, not plumbing</p>
+  </header>
+
+  <div class="sheet">
+
+    <section class="group">
+      <h2>Stage &amp; commit</h2>
+      <ul class="cmds">
+        <li><code>git add -p</code><span>Stage hunks interactively, not whole files</span></li>
+        <li><code>git commit --amend --no-edit</code><span>Fold staged changes into the last commit, keep its message</span></li>
+        <li><code>git commit --fixup &lt;sha&gt;</code><span>Mark a fixup for autosquash on the next rebase</span></li>
+        <li><code>git restore --staged &lt;file&gt;</code><span>Unstage without touching the working tree</span></li>
+      </ul>
+    </section>
+
+    <section class="group">
+      <h2>Branch &amp; switch</h2>
+      <ul class="cmds">
+        <li><code>git switch -c &lt;name&gt;</code><span>Create a branch and move onto it</span></li>
+        <li><code>git switch -</code><span>Jump back to the previous branch</span></li>
+        <li><code>git branch --merged</code><span>List branches already folded into HEAD — safe to delete</span></li>
+        <li><code>git push -u origin HEAD</code><span>Push the current branch and set its upstream</span></li>
+      </ul>
+      <p class="hint"><code>switch</code> is the modern split of <code>checkout</code>; use <code>restore</code> for files.</p>
+    </section>
+
+    <section class="group">
+      <h2>Inspect history</h2>
+      <ul class="cmds">
+        <li><code>git log --oneline --graph</code><span>Compact topology of the branch graph</span></li>
+        <li><code>git log -p &lt;file&gt;</code><span>Every change to one file, newest first</span></li>
+        <li><code>git log -S'&lt;text&gt;'</code><span>Find commits that added or removed a string (pickaxe)</span></li>
+        <li><code>git blame -L 20,40 &lt;file&gt;</code><span>Who last touched each line in a range</span></li>
+      </ul>
+    </section>
+
+    <section class="group">
+      <h2>Diff &amp; compare</h2>
+      <ul class="cmds">
+        <li><code>git diff</code><span>Working tree vs. index — what you haven't staged</span></li>
+        <li><code>git diff --staged</code><span>Index vs. HEAD — what the next commit holds</span></li>
+        <li><code>git diff main...</code><span>Changes on this branch since it left main</span></li>
+        <li><code>git range-diff main HEAD@{1} HEAD</code><span>Compare two versions of a rebased branch</span></li>
+      </ul>
+    </section>
+
+    <section class="group">
+      <h2>Undo &amp; recover</h2>
+      <ul class="cmds">
+        <li><code>git restore &lt;file&gt;</code><span>Discard working-tree edits to a file</span></li>
+        <li><code>git reset --soft HEAD~1</code><span>Undo the last commit, keep changes staged</span></li>
+        <li><code>git revert &lt;sha&gt;</code><span>New commit that inverts an old one — safe on shared history</span></li>
+        <li><code>git reflog</code><span>The escape hatch: every HEAD move, even "lost" commits</span></li>
+      </ul>
+      <p class="hint"><code>reset --hard</code> throws away work — confirm with <code>git status</code> first.</p>
+    </section>
+
+    <section class="group">
+      <h2>Rebase &amp; rewrite</h2>
+      <ul class="cmds">
+        <li><code>git rebase -i main</code><span>Reorder, squash, and reword commits since main</span></li>
+        <li><code>git rebase --autosquash</code><span>Apply <code>--fixup</code> marks automatically</span></li>
+        <li><code>git rebase --abort</code><span>Bail out and restore the pre-rebase state</span></li>
+        <li><code>git push --force-with-lease</code><span>Overwrite a remote branch only if nobody else pushed</span></li>
+      </ul>
+      <p class="hint">Never rebase a branch others have already pulled from.</p>
+    </section>
+
+    <section class="group">
+      <h2>Stash &amp; worktree</h2>
+      <dl class="defs">
+        <div><dt>stash push -m</dt><dd>Shelve dirty changes with a label</dd></div>
+        <div><dt>stash pop</dt><dd>Reapply the top stash and drop it</dd></div>
+        <div><dt>worktree add</dt><dd>Check a branch out in a second directory</dd></div>
+        <div><dt>worktree prune</dt><dd>Clean up stale worktree links</dd></div>
+      </dl>
+    </section>
+
+    <section class="group">
+      <h2>Revision syntax</h2>
+      <dl class="defs">
+        <div><dt class="nw">HEAD~3</dt><dd>Third ancestor along the first parent</dd></div>
+        <div><dt class="nw">HEAD^2</dt><dd>Second parent of a merge</dd></div>
+        <div><dt class="nw">@{u}</dt><dd>The upstream of the current branch</dd></div>
+        <div><dt class="nw">main@{1}</dt><dd>Where main pointed one move ago</dd></div>
+      </dl>
+    </section>
+
+    <section class="group">
+      <h2>Interactive keys</h2>
+      <ul class="keys">
+        <li><span class="combo"><kbd>y</kbd></span><span class="act">Stage this hunk (in <code>add -p</code>)</span></li>
+        <li><span class="combo"><kbd>s</kbd></span><span class="act">Split the hunk into smaller ones</span></li>
+        <li><span class="combo"><kbd>j</kbd><span class="sep">/</span><kbd>k</kbd></span><span class="act">Next / previous hunk</span></li>
+        <li><span class="combo"><kbd>q</kbd></span><span class="act">Quit the interactive session</span></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer>git 2.40+ · porcelain commands only · run <code>git help &lt;cmd&gt;</code> for the full manual</footer>
+</main>

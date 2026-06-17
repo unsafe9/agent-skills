@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard</title>
+
+<style>{{CSS}}</style>
+
+<style>
+  html,body{height:100%}
+  body{margin:0; line-height:1.4;
+    height:100dvh; overflow:hidden;
+    display:grid;
+    grid-template-rows:auto auto minmax(0,1fr) auto;
+    gap:var(--dgap);
+    padding:clamp(.7rem,2vh,1.3rem) clamp(.8rem,2vw,1.5rem)}
+  body{--dgap:clamp(.5rem,1.4vh,1rem); --dpad:clamp(.7rem,1.6vmin,1.2rem)}
+
+  .panel{background:var(--bg2); border:1px solid var(--line); border-radius:var(--radius);
+    padding:var(--dpad); display:flex; flex-direction:column; min-height:0; overflow:hidden}
+  .ph{display:flex; align-items:baseline; gap:.6rem; margin:0 0 .5rem}
+  .ph h2{margin:0; font-size:clamp(.78rem,1.5vmin,.95rem); letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700}
+  .ph .sub{font-size:.78rem; color:var(--muted)}
+
+  /* HEADER STRIP */
+  .head{display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap}
+  .head h1{margin:0; font-size:clamp(1.1rem,2.6vmin,1.7rem); font-weight:760; letter-spacing:-.01em}
+  .head .ctx{display:flex; align-items:center; gap:.9rem; color:var(--muted); font-size:clamp(.72rem,1.4vmin,.9rem)}
+  .head .ctx b{color:var(--fg); font-weight:600}
+  .pill{display:inline-flex; align-items:center; gap:.4rem; padding:.25rem .7rem; border-radius:999px;
+    border:1px solid var(--line); font-size:clamp(.7rem,1.4vmin,.85rem); font-weight:700; white-space:nowrap}
+  .pill.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
+  .pill.warn{color:var(--warn,#c98a00); border-color:color-mix(in srgb,var(--warn,#c98a00) 45%,var(--line))}
+  .pill.bad{color:var(--bad); border-color:color-mix(in srgb,var(--bad) 45%,var(--line)); background:color-mix(in srgb,var(--bad) 12%,transparent)}
+
+  /* KPI STAT TILES */
+  .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr)); gap:var(--dgap)}
+  .kpi .v{font-size:clamp(1.6rem,5vmin,3rem); font-weight:780; line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .kpi .v small{font-size:.4em; font-weight:600; color:var(--muted); margin-left:.15em}
+  .kpi .l{color:var(--muted); font-size:clamp(.72rem,1.5vmin,.92rem); margin-top:.35rem}
+  .kpi .d{display:inline-flex; align-items:center; gap:.25rem; margin-top:.5rem; font-size:clamp(.7rem,1.4vmin,.85rem); font-weight:700}
+  .kpi .d.up{color:var(--good)} .kpi .d.down{color:var(--bad)} .kpi .d.flat{color:var(--muted)}
+
+  /* MAIN BODY split */
+  .grid2{display:grid; grid-template-columns:1.7fr 1fr; gap:var(--dgap); min-height:0}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+  /* status dots — three-state, filled (high contrast) */
+  .dot{display:inline-block; width:.62em; height:.62em; border-radius:50%; vertical-align:middle; margin-right:.45em; flex:0 0 auto}
+  .dot.good{background:var(--good)} .dot.warn{background:var(--warn,#c98a00)} .dot.bad{background:var(--bad)}
+
+  /* STATUS TABLE — short cells, no horizontal scroll */
+  .tblwrap{flex:1; min-height:0; overflow:hidden}
+  table{width:100%; border-collapse:collapse; font-size:clamp(.74rem,1.6vmin,.95rem)}
+  th,td{text-align:left; padding:.4rem .55rem; border-bottom:1px solid var(--line); white-space:normal}
+  thead th{color:var(--muted); font-weight:600; font-size:.74rem; letter-spacing:.04em; text-transform:uppercase}
+  tbody tr:last-child td{border-bottom:0}
+  td.num{text-align:right; font-variant-numeric:tabular-nums}
+  td .good{color:var(--good)} td .bad{color:var(--bad)} td .warn{color:var(--warn,#c98a00)}
+  .nw{white-space:nowrap}
+
+  /* MINI-CHART — inline SVG sparkline, viewBox-scaled */
+  .chartbox{flex:1; min-height:0; display:flex; flex-direction:column; gap:.4rem}
+  .spark{flex:1; min-height:0; width:100%}
+  .spark .area{fill:var(--accent); opacity:.16}
+  .spark .line{fill:none; stroke:var(--accent); stroke-width:2; vector-effect:non-scaling-stroke; stroke-linejoin:round; stroke-linecap:round}
+  .spark .grid{stroke:var(--line); stroke-width:1; vector-effect:non-scaling-stroke}
+  .chartbox .scale{display:flex; justify-content:space-between; color:var(--muted); font-size:.7rem; font-variant-numeric:tabular-nums}
+  .bars{flex:1; min-height:0; width:100%}
+  .bars rect{fill:var(--accent)}
+  .bars text{fill:var(--muted); font-size:7px; font-family:var(--font)}
+
+  /* STATUS LEGEND + FOOTER NOTE */
+  .foot{display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+    color:var(--muted); font-size:clamp(.7rem,1.4vmin,.85rem)}
+  .legend{display:flex; gap:1.1rem; flex-wrap:wrap}
+  .legend span{display:inline-flex; align-items:center}
+
+  /* PRINT — collapse the viewport lock onto one landscape page */
+  @media print{
+    @page{size:landscape; margin:1cm}
+    body{height:auto; overflow:visible; background:#fff; color:#000; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .panel{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+{{BODY}}
+
+<script>{{JS}}</script>
+</body>
+</html>

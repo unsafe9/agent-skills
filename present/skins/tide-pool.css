@@ -1,0 +1,25 @@
+/* skin: tide-pool — deep petrol marine dark with a bright aqua accent.
+   MOOD: a dive light on a reef at depth — saturated teal-petrol water, one
+   electric cyan beam. Cool and oceanic, distinct from midnight's blue-grey
+   neutrality and terminal's phosphor green.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens (palette, fonts,
+   --radius) and structure-agnostic decoration. NEVER structural sizing
+   (no --maxw/--prose/--pad, no type scale, no section/.slide spacing, no
+   mode/nav/footer positioning). Loaded after base.css, before the shell. */
+:root{
+  --bg:#08171a; --bg2:#0e2329; --line:#1b3942;
+  --fg:#dbeef0; --muted:#83a6ab;
+  --accent:#25d3d9; --good:#6fe0a0; --bad:#ff7b7b;
+  --code-bg:#061215;
+  --radius:12px;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+/* dark skin: keep base's inverted accent band (dark text on the bright aqua
+   fill — base encodes #0b0d12 on var(--accent), which reads ~10:1 here). */
+
+/* code text reads a soft sea-foam light on the near-black slab */
+pre code{color:#d6eef0}
+/* links: an aqua underline like a depth marker */
+a{text-decoration:none; border-bottom:1px solid rgba(37,211,217,.4)}
+a:hover{border-bottom-color:var(--accent)}

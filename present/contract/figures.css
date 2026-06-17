@@ -1,0 +1,32 @@
+/* figures module — STRUCTURAL sizing for the shared visual primitives. build.py
+   injects this after base+skin (so it is skin-immune) into every style that
+   allowlists `figures`. base.css carries only their cosmetics; a shell's own
+   <style> loads last and may override for its context (e.g. the diagram canvas
+   maximizes the focal SVG; slides scales SVG text up for billboard distance). */
+
+/* file/dir tree — connector geometry (base draws the border colors) */
+.tree{padding-left:.4rem; font-size:1.02rem; line-height:1.9}
+.tree ul{margin:0; padding-left:1.3rem}
+.tree li{padding-left:1.2rem}
+.tree li::before{left:0; top:0; height:100%}
+.tree li::after{left:0; top:.95em; width:.9rem}
+.tree li:last-child::before{height:.95em}
+
+/* stacked abstraction layers — a bold label over a muted note */
+.layers{gap:var(--gap-tight)}
+.layer{padding:var(--pad)}
+.layer b{display:block; font-size:1.05rem}
+.layer span{display:block; margin-top:.25rem; font-size:.95rem}
+
+/* sequence / concurrency SVG — intrinsic text + stroke legibility */
+.swimlane .actor,.race .actor{font-size:15px}
+.swimlane .mlabel{font-size:13px}
+.swimlane .msg,.swimlane .msg--return{stroke-width:2}
+.swimlane .lane,.race .lane{stroke-width:1.5}
+.race .evt-l{font-size:13px}
+.race .ev{r:7}
+.race .hb{stroke-width:2}
+
+/* branching diagram + trend chart — default text/stroke (a shell may scale up) */
+.diagram .dt{font-size:17px} .diagram .ds{font-size:12px} .diagram .dconn{stroke-width:2.5}
+.chart text{font-size:14px}

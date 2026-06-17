@@ -1,0 +1,116 @@
+<!-- slides STYLE · timeline pattern.
+     A sequence of dated/ordered slides forming a progression — each slide is one
+     point on the timeline, advanced with → / space, and the overview grid (O)
+     doubles as the chronological index. The kicker carries the date so the slide
+     reads as a moment in the sequence. This is an incident post-mortem timeline
+     ending in a decision. Assemble:
+     build.py --style slides --body examples/slides/timeline.body.html -->
+<main id="deck">
+
+  <section class="slide title" data-title="The incident">
+    <div class="wrap">
+      <div class="kicker">Post-mortem · 2026-05-14</div>
+      <h1>Checkout was down for 38 minutes</h1>
+      <p class="lead">A timeline of what happened, in order. Step through with <span class="accent">→</span>; press <span class="accent">O</span> for the whole sequence at once.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-title="09:02 · Deploy">
+    <div class="wrap">
+      <div class="kicker">09:02 · trigger</div>
+      <h2>A routine deploy shipped a tighter DB pool</h2>
+      <p>Connection pool max dropped from 80 to 20 in a config cleanup. CI was green; the change looked cosmetic.</p>
+      <aside class="notes">The PR description framed it as "trim unused headroom" — nobody flagged the pool size as load-bearing.</aside>
+    </div>
+  </section>
+
+  <section class="slide" data-title="09:09 · First errors">
+    <div class="wrap">
+      <div class="kicker">09:09 · symptom</div>
+      <h2>Checkout latency climbed, then errors followed</h2>
+      <div class="bars">
+        <div class="bar"><i style="--v:18%"></i><b>120</b><span>09:00</span></div>
+        <div class="bar"><i style="--v:30%"></i><b>210</b><span>09:05</span></div>
+        <div class="bar"><i style="--v:64%"></i><b>460</b><span>09:09</span></div>
+        <div class="bar"><i style="--v:100%"></i><b>720</b><span>09:13</span></div>
+      </div>
+      <p>p99 checkout latency, milliseconds. Pool exhaustion queued every request behind the 20 available connections.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-title="09:15 · Paged">
+    <div class="wrap">
+      <div class="kicker">09:15 · response</div>
+      <h2>On-call was paged on the error-rate SLO</h2>
+      <ul class="points">
+        <li>5xx rate crossed 2% for 5 minutes<small>SLO burn alert fired to PagerDuty</small></li>
+        <li>First responder acked in 90 seconds<small>started from the deploy timeline, not the metrics</small></li>
+        <li>Suspected the deploy immediately<small>only change in the window</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" data-title="09:31 · Rollback">
+    <div class="wrap">
+      <div class="kicker">09:31 · mitigation</div>
+      <h2>Rollback restored the pool and drained the queue</h2>
+      <p>Reverting the config brought the pool back to 80. Queued requests cleared within two minutes and latency returned to baseline.</p>
+      <blockquote>The fix took one click. Finding which click took twenty-two minutes.<cite>On-call retro note</cite></blockquote>
+    </div>
+  </section>
+
+  <section class="slide" data-title="09:40 · Recovered">
+    <div class="wrap">
+      <div class="kicker">09:40 · resolved · 38m total</div>
+      <h2>Fully recovered — now what stops the next one?</h2>
+      <div class="stats">
+        <div class="stat"><div class="n bad">38m</div><div class="l">time to recover</div></div>
+        <div class="stat"><div class="n">22m</div><div class="l">spent on diagnosis</div></div>
+        <div class="stat"><div class="n good">0</div><div class="l">orders lost (retried)</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Decision">
+    <div class="wrap">
+      <h2>What's the highest-leverage follow-up?</h2>
+      <p class="ask">↓ pick one and copy the next step below</p>
+      <div class="decision" data-key="followup">
+        <div class="options">
+          <button class="option pick" data-frag="커넥션 풀 같은 용량 설정값을 deploy 차단 체크리스트에 넣자">
+            <b>Guard capacity config</b>
+            <p>Flag pool/limit changes in CI so they can't ship as "cosmetic".</p>
+          </button>
+          <button class="option" data-frag="풀 고갈 지표에 알람을 붙여서 더 빨리 짚자">
+            <b>Alert on pool saturation</b>
+            <p>Page on connection-pool exhaustion directly — cut the 22m diagnosis.</p>
+          </button>
+          <button class="option" data-frag="배포-지표 상관 대시보드를 만들어서 원인 추적을 빠르게 하자">
+            <b>Deploy↔metrics dashboard</b>
+            <p>Correlate deploys with SLO burn so the trigger is obvious.</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Copy next step">
+    <div class="wrap">
+      <h2>다음 단계 프롬프트</h2>
+      <div id="composer" data-lead="포스트모템 후속으로" data-tail="부터 하자">
+        <pre id="prompt-preview"></pre>
+        <button id="copy-btn">복사</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="overview"></div>
+
+<footer>
+  <div id="progress"><div id="bar"></div></div>
+  <span id="counter">1 / 8</span>
+  <button class="fbtn" id="modeBtn" onclick="toggleMode()">▭ slides</button>
+  <span class="hint">M mode · O overview · N notes · ← →</span>
+</footer>

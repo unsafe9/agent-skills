@@ -1,0 +1,53 @@
+/* skin: newsprint — high-contrast broadsheet light, ink on cool paper, one red.
+   MOOD: a morning broadsheet — crisp near-white stock, black ink set in serif,
+   a single signal-red for the masthead and rules. Editorial and authoritative,
+   achromatic where warm-paper is warm and playful-light is blue.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens and
+   structure-agnostic decoration. NEVER structural sizing. Loaded after
+   base.css, before the shell — so its :root wins over base/dark tokens and the
+   shell's structural sizing still wins over everything.
+
+   Contrast: every surface keeps dark ink on a light fill; the accent band is a
+   pale red-grey wash with dark text (NOT inverted white-on-accent). */
+:root{
+  --bg:#f6f6f4; --bg2:#fcfcfb; --line:#dcdcd6;
+  --fg:#1a1a18; --muted:#5b5b54;
+  --accent:#c4302b; --good:#2e7d46; --bad:#c4302b;
+  --code-bg:#eeeeea;
+  --radius:6px;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --serif:ui-serif,Georgia,"Times New Roman",Cambria,serif;
+}
+
+/* serif headings + tight uppercase kicker — the broadsheet signature (decoration, not sizing) */
+.eyebrow,.kicker{letter-spacing:.12em; font-weight:700}
+h1,h2,h3{font-family:var(--serif); font-weight:700; letter-spacing:-.01em}
+.card h3{font-family:var(--serif)}
+thead th{letter-spacing:.08em}
+tbody th{font-family:var(--serif); font-weight:700}
+.stat .n{font-family:var(--serif)}
+.quote,blockquote{font-family:var(--serif); font-style:italic}
+.quote cite,blockquote cite{font-style:normal; font-family:var(--font)}
+.option b{font-family:var(--serif)}
+.tldr p strong{font-family:var(--serif)}
+
+/* newsprint accent band: pale red-grey wash, dark ink — NOT inverted.
+   Overrides base's dark-text-on-bright-accent so contrast holds on light. */
+.band--accent{background:linear-gradient(135deg, #f0e3e1, #f7eeed); color:var(--fg)}
+.band--accent .eyebrow,.band--accent .kicker{color:#a8261f; opacity:1}
+.band--accent h2,.band--accent .quote,.band--accent blockquote{color:var(--fg)}
+.band--accent p,.band--accent li{color:var(--fg); opacity:1}
+.band--accent .lead,.band--accent .quote cite,.band--accent blockquote cite{color:var(--muted); opacity:1}
+.band--accent .stat .l{color:var(--muted); opacity:1}
+
+/* black ink code text on the light newsprint slab */
+pre code{color:#1f1f1d}
+.cmt{color:var(--muted)} .key{color:var(--accent)} .str{color:var(--good)}
+
+/* composer button: white label on the signal-red fill */
+#copy-btn{color:#ffffff}
+
+/* links: a broadsheet red underline */
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(196,48,43,.4)}
+a:hover{border-bottom-color:var(--accent)}

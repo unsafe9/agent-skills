@@ -1,0 +1,40 @@
+/* skin: playful-light — bright, friendly cool-light with a vivid blue accent.
+   MOOD: a clean product whiteboard in daylight — airy white surfaces, crisp
+   ink, a confident blue. Energetic and approachable, the daytime counterpart
+   to the dark skins.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens and
+   structure-agnostic decoration. NEVER structural sizing. Loaded after
+   base.css, before the shell — so its :root wins over base/dark tokens and the
+   shell's structural sizing still wins over everything.
+
+   Contrast: every surface keeps dark ink on a light fill; the accent band is a
+   pale blue wash with dark text (NOT inverted white-on-accent). */
+:root{
+  --bg:#f6f7f9; --bg2:#ffffff; --line:#e4e7ec;
+  --fg:#1b1f27; --muted:#646c79;
+  --accent:#2f5fe0; --good:#1ba672; --bad:#e0533d;
+  --code-bg:#f0f2f5;
+  --radius:16px;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+
+/* light skin: pale blue accent band with dark ink — overrides base's
+   inverted dark-text-on-bright-accent treatment so contrast holds on light. */
+.band--accent{background:linear-gradient(135deg, #e3ebff, #f1f5ff); color:var(--fg)}
+.band--accent .eyebrow,.band--accent .kicker{color:#1f49c9; opacity:1}
+.band--accent h2,.band--accent .quote,.band--accent blockquote{color:var(--fg)}
+.band--accent p,.band--accent li{color:var(--fg); opacity:1}
+.band--accent .lead,.band--accent .quote cite,.band--accent blockquote cite{color:var(--muted); opacity:1}
+.band--accent .stat .l{color:var(--muted); opacity:1}
+
+/* dark code text on the light code slab */
+pre code{color:#222630}
+.cmt{color:var(--muted)} .key{color:var(--accent)} .str{color:var(--good)}
+
+/* composer button: white label on the vivid blue fill */
+#copy-btn{color:#ffffff}
+
+/* links: friendly underline on the light palette */
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(47,95,224,.35)}
+a:hover{border-bottom-color:var(--accent)}

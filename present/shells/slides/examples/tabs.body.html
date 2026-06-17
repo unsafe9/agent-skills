@@ -1,0 +1,135 @@
+<!-- slides STYLE · faceted/"tabs" pattern.
+     Each slide is ONE self-contained facet of the same subject; there is no
+     left-to-right "tab strip" widget — slides STYLE already gives you lateral
+     access via the overview grid (press O), so faceted decks need no dedicated
+     shell. The deck below presents four facets of a caching layer plus a
+     decision facet, and one facet explicitly points at the overview as the
+     tab-switcher. Assemble: build.py --style slides --body examples/slides/tabs.body.html -->
+<main id="deck">
+
+  <section class="slide title" data-title="Overview">
+    <div class="wrap">
+      <div class="kicker">Caching layer · pick a facet</div>
+      <h1>Four facets of the cache, one decision</h1>
+      <p class="lead">Each screen stands alone. Jump straight to the facet you care about with the overview grid — press <span class="accent">O</span>.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-title="What it does">
+    <div class="wrap">
+      <div class="kicker">Facet 1 · purpose</div>
+      <h2>It absorbs read load before it reaches Postgres</h2>
+      <ul class="points">
+        <li>Hot rows are served from memory<small>p99 read drops from 40ms to under 2ms</small></li>
+        <li>Postgres sees only misses and writes<small>~85% of reads never touch the database</small></li>
+        <li>TTL keeps entries fresh enough<small>30s for listings, 5m for profiles</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" data-title="How it's wired">
+    <div class="wrap">
+      <div class="kicker">Facet 2 · data flow</div>
+      <h2>Read-through, write-around</h2>
+      <svg class="diagram" viewBox="0 0 640 300" role="img" aria-label="read-through cache flow">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z"/>
+          </marker>
+        </defs>
+        <rect class="dbox" x="20" y="120" width="150" height="64" rx="10"/>
+        <text class="dt" x="95" y="148">App</text>
+        <text class="ds" x="95" y="168">request</text>
+        <rect class="dbox" x="245" y="120" width="150" height="64" rx="10"/>
+        <text class="dt" x="320" y="148">Cache</text>
+        <text class="ds" x="320" y="168">hit · 85%</text>
+        <rect class="dbox" x="470" y="40" width="150" height="64" rx="10"/>
+        <text class="dt" x="545" y="68">Postgres</text>
+        <text class="ds" x="545" y="88">miss · fill</text>
+        <rect class="dbox" x="470" y="196" width="150" height="64" rx="10"/>
+        <text class="dt" x="545" y="224">Postgres</text>
+        <text class="ds" x="545" y="244">writes go here</text>
+        <path class="dconn" d="M170 152 H245" marker-end="url(#ah)"/>
+        <path class="dconn" d="M395 140 C 430 120, 440 90, 470 80" marker-end="url(#ah)"/>
+        <path class="dconn" d="M170 168 C 300 280, 360 240, 470 232" marker-end="url(#ah)"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide" data-title="What it costs">
+    <div class="wrap">
+      <div class="kicker">Facet 3 · the numbers</div>
+      <h2>Cheap to run, measurable win</h2>
+      <div class="stats">
+        <div class="stat"><div class="n good">85%</div><div class="l">read hit rate</div></div>
+        <div class="stat"><div class="n good">20×</div><div class="l">faster hot reads</div></div>
+        <div class="stat"><div class="n accent">1</div><div class="l">extra service to run</div></div>
+        <div class="stat"><div class="n bad">~30s</div><div class="l">worst-case staleness</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Where it bites">
+    <div class="wrap">
+      <div class="kicker">Facet 4 · the catch</div>
+      <h2>Two failure modes to plan for</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Stampede on cold keys</h3>
+          <p>A popular key expiring sends every request to Postgres at once. Mitigate with a short jittered lock or request coalescing.</p>
+        </div>
+        <div class="card">
+          <h3>Stale after a write</h3>
+          <p>Write-around means the cache keeps the old value until TTL. Reads can lag a write by up to the TTL window.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Decision">
+    <div class="wrap">
+      <h2>How aggressive should invalidation be?</h2>
+      <p class="ask">↓ pick one and copy the next step below</p>
+      <div class="decision" data-key="invalidation">
+        <div class="options">
+          <button class="option" data-frag="TTL만으로 가고 stale read는 감수하자">
+            <b>TTL only</b>
+            <p>Simplest. Accept up to 30s of staleness. No write-path coupling.</p>
+          </button>
+          <button class="option pick" data-frag="쓰기 시점에 키를 무효화하는 걸로 가자">
+            <b>Invalidate on write</b>
+            <p>Cache deletes the key on every write. Tighter freshness, small write-path cost.</p>
+          </button>
+          <button class="option" data-frag="write-through로 캐시랑 DB를 같이 갱신하자">
+            <b>Write-through</b>
+            <p>Update cache and DB together. Freshest reads, most coupling.</p>
+          </button>
+        </div>
+      </div>
+      <div class="freeinput">
+        <label>특정 키만 다르게 가져갈 게 있으면 적어줘</label>
+        <textarea class="ask-input" data-key="exceptions" data-frag="예외 키: {v}"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Copy next step">
+    <div class="wrap">
+      <h2>다음 단계 프롬프트</h2>
+      <div id="composer" data-lead="캐시 무효화 전략은" data-tail="이걸로 가자">
+        <pre id="prompt-preview"></pre>
+        <button id="copy-btn">복사</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="overview"></div>
+
+<footer>
+  <div id="progress"><div id="bar"></div></div>
+  <span id="counter">1 / 7</span>
+  <button class="fbtn" id="modeBtn" onclick="toggleMode()">▭ slides</button>
+  <span class="hint">M mode · O overview · N notes · ← →</span>
+</footer>

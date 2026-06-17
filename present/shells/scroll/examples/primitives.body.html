@@ -1,0 +1,72 @@
+<main>
+  <section class="hero" data-nav="Intro">
+    <div class="wrap">
+      <div class="eyebrow">Codebase · layout</div>
+      <h1>The present skill is a thin assembler over a flat parts tree</h1>
+      <p class="lead">Same diagram primitives the <span class="accent">diagram</span> STYLE uses — a tree and a layer stack — drop straight into a scroll document.</p>
+    </div>
+  </section>
+
+  <section data-nav="Tree">
+    <div class="wrap">
+      <h2>Where the parts live</h2>
+      <p>The build script reads a shell, base.css, a skin, and an engine, then injects the authored body. Nothing else is in the tree.</p>
+      <ul class="tree">
+        <li><span class="t-dir">present/</span>
+          <ul>
+            <li><span class="t-file">build.py</span></li>
+            <li><span class="t-file">base.css</span></li>
+            <li><span class="t-dir">shells/</span>
+              <ul>
+                <li><span class="t-file">scroll.html</span></li>
+                <li><span class="t-file">diagram.html</span></li>
+              </ul>
+            </li>
+            <li><span class="t-dir">engines/</span>
+              <ul>
+                <li><span class="t-file">scroll.js</span></li>
+                <li><span class="t-file">diagram.js</span></li>
+              </ul>
+            </li>
+            <li><span class="t-dir">skins/</span>
+              <ul><li><span class="t-file">midnight.css</span></li></ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section data-nav="Layers">
+    <div class="wrap">
+      <h2>The cascade is four stacked layers</h2>
+      <p>base cosmetics load first, the skin overrides tokens, each module's CSS sizes its primitives, and the shell's structural sizing loads last and wins — immune to reskinning.</p>
+      <div class="layers">
+        <div class="layer"><b>base.css</b><span>structure-neutral cosmetics for every vocabulary class</span></div>
+        <div class="layer"><b>skin.css</b><span>:root palette + decoration; overrides base tokens</span></div>
+        <div class="layer"><b>contract/&lt;module&gt;.css</b><span>shared primitive sizing for the modules this STYLE allowlists</span></div>
+        <div class="layer layer--accent"><b>shell &lt;style&gt;</b><span>structural sizing — loads last, wins over the skin</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-nav="Next">
+    <div class="wrap">
+      <h2>Want this as a full-page figure instead?</h2>
+      <p>The same tree and layer stack get the whole viewport under the <span class="accent">diagram</span> STYLE.</p>
+      <div class="decision" data-key="style">
+        <div class="options">
+          <button class="option pick" data-frag="scroll 문서 안에 인라인 다이어그램으로 두자">Keep inline in scroll<p>reads as part of the document flow</p></button>
+          <button class="option" data-frag="diagram STYLE로 풀페이지 캔버스로 빼자">Promote to diagram STYLE<p>figure gets the full viewport</p></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="composer" data-lead="결정:" data-tail="이렇게 가자">
+    <div class="wrap">
+      <pre id="prompt-preview"></pre>
+      <button id="copy-btn">복사</button>
+    </div>
+  </section>
+</main>

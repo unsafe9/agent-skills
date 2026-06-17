@@ -1,0 +1,25 @@
+/* skin: terminal-mono — phosphor-green walkthrough on a near-black console.
+   MOOD: a code review at a terminal — everything set in monospace, a single
+   bright phosphor-green accent, tight corners. Reads as a hacker's notebook.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens (palette, fonts,
+   --radius) and structure-agnostic decoration. NEVER structural sizing
+   (no --maxw/--prose/--pad, no type scale, no section/.slide spacing, no
+   mode/nav/footer positioning). Loaded after base.css, before the shell. */
+:root{
+  --bg:#0c0f0d; --bg2:#121613; --line:#1f2a22;
+  --fg:#cfe0d6; --muted:#7d8d83;
+  --accent:#5fe08a; --good:#5fe08a; --bad:#ff6b6b;
+  --code-bg:#0a0d0b;
+  --radius:8px;
+  /* mono everywhere — this is the terminal signature (decoration, not sizing) */
+  --font:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* dark skin: base's inverted accent band holds (dark text on bright green,
+   ~11.6:1). Eyebrow/kicker keep their uppercase mono rhythm from base. */
+
+/* code text reads soft phosphor on the console slab */
+pre code{color:#cfe0d6}
+/* links underline the way a terminal hyperlink would */
+a{text-decoration:underline; text-underline-offset:2px; text-decoration-color:var(--line)}
+a:hover{text-decoration-color:var(--accent)}

@@ -1,0 +1,78 @@
+<!-- dashboard STYLE · service-health pattern.
+     One no-scroll viewport: a .head strip (board title + as-of + status pill),
+     four .kpi tiles whose delta color carries direction, then a .grid2 splitting
+     a regional status table against a request-rate sparkline, closed by a .foot
+     legend + source stamp. NOT a reading or decision surface — no composer, no
+     selectable options. Assemble:
+     build.py --style dashboard --body examples/health.body.html -->
+<header class="head">
+  <h1>Checkout API · service health</h1>
+  <div class="ctx">
+    <span>as of <b>14:36 UTC</b></span>
+    <span class="pill warn"><span class="dot warn"></span>1 region degraded</span>
+  </div>
+</header>
+
+<section class="kpis">
+  <div class="panel kpi">
+    <div class="v">99.94<small>%</small></div>
+    <div class="l">Availability · 24h</div>
+    <div class="d down">▼ 0.04 pts</div>
+  </div>
+  <div class="panel kpi">
+    <div class="v">214<small>ms</small></div>
+    <div class="l">p99 latency</div>
+    <div class="d down">▲ 18ms</div>
+  </div>
+  <div class="panel kpi">
+    <div class="v">0.21<small>%</small></div>
+    <div class="l">Error rate</div>
+    <div class="d down">▲ 0.09 pts</div>
+  </div>
+  <div class="panel kpi">
+    <div class="v">12.8<small>k/s</small></div>
+    <div class="l">Requests</div>
+    <div class="d flat">— steady</div>
+  </div>
+</section>
+
+<section class="grid2">
+  <div class="panel">
+    <div class="ph"><h2>Regional status</h2><span class="sub">5 regions · 1 SLO breach</span></div>
+    <div class="tblwrap">
+      <table>
+        <thead>
+          <tr><th>Region</th><th></th><th class="num">p99</th><th class="num">Err</th><th>State</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="nw"><span class="dot good"></span>us-east</td><td class="nw">Virginia</td><td class="num">188ms</td><td class="num">0.08%</td><td class="good">Healthy</td></tr>
+          <tr><td class="nw"><span class="dot good"></span>us-west</td><td class="nw">Oregon</td><td class="num">201ms</td><td class="num">0.11%</td><td class="good">Healthy</td></tr>
+          <tr><td class="nw"><span class="dot warn"></span>eu-central</td><td class="nw">Frankfurt</td><td class="num">409ms</td><td class="num">0.34%</td><td class="warn">Degraded</td></tr>
+          <tr><td class="nw"><span class="dot good"></span>ap-south</td><td class="nw">Mumbai</td><td class="num">233ms</td><td class="num">0.14%</td><td class="good">Healthy</td></tr>
+          <tr><td class="nw"><span class="dot bad"></span>ap-ne</td><td class="nw">Tokyo</td><td class="num">—</td><td class="num">3.9%</td><td class="bad">SLO breach</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><h2>Requests / sec</h2><span class="sub">last 60 min</span></div>
+    <div class="chartbox">
+      <svg class="spark" viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-label="request rate, last 60 minutes">
+        <line class="grid" x1="0" y1="20" x2="100" y2="20"/>
+        <path class="area" d="M0,24 L8,22 L16,25 L24,18 L32,16 L40,19 L48,13 L56,15 L64,11 L72,17 L80,12 L88,10 L100,9 L100,40 L0,40 Z"/>
+        <path class="line" d="M0,24 L8,22 L16,25 L24,18 L32,16 L40,19 L48,13 L56,15 L64,11 L72,17 L80,12 L88,10 L100,9"/>
+      </svg>
+      <div class="scale"><span>13:36</span><span>14:06</span><span>14:36</span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="legend">
+    <span><span class="dot good"></span>Healthy</span>
+    <span><span class="dot warn"></span>Degraded</span>
+    <span><span class="dot bad"></span>SLO breach</span>
+  </div>
+  <div>source: Prometheus · checkout-api · 30s scrape</div>
+</footer>

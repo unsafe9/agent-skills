@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page</title>
+<!-- ASSEMBLED by build.py: the CSS slot below = base.css + chosen skin; the JS slot
+     near the end = engines/scroll.js; the body slot = the authored fragment
+     (<main> sections + composer). Single offline file. -->
+
+<!-- 1) base cosmetics THEN skin decoration. Skin :root wins over base :root. -->
+<style>{{CSS}}</style>
+
+<!-- 2) STRUCTURAL CSS for the scroll structure — type scale, container widths, section
+     rhythm, mode positioning, and nav chrome (#progress / nav.dots / .reveal). Loaded
+     LAST so structural sizing wins over the skin and is immune to reskinning. This is
+     why scroll reads document-grade from the same skin file that makes slides billboard-grade. -->
+<style>
+  html{scroll-behavior:smooth}
+  body{margin:0; line-height:1.65; overflow-x:hidden}
+
+  /* nav chrome — scroll structure */
+  #progress{position:fixed; top:0; left:0; right:0; height:3px; z-index:100}
+  #bar{height:100%; width:0}
+  nav.dots{position:fixed; right:1rem; top:50%; transform:translateY(-50%); display:flex;
+    flex-direction:column; gap:.6rem; z-index:90}
+  nav.dots a{width:.55rem; height:.55rem}
+  @media(max-width:900px){nav.dots{display:none}}
+
+  /* container widths + section rhythm — document-grade */
+  .wrap{max-width:880px; margin:0 auto; padding-inline:clamp(1.3rem,4vw,3rem)}
+  .prose{max-width:880px; margin:0 auto; padding-inline:clamp(1.3rem,4vw,3rem)}
+  .wide{max-width:min(1180px,94vw); margin:0 auto; padding-inline:clamp(1.3rem,4vw,3rem)}
+  section{padding-block:clamp(3rem,7vh,5.5rem)}
+  .hero{padding-block:clamp(3.2rem,9vh,6rem)}
+  .hero .lead{margin-top:1rem}
+
+  /* breathing room between stacked block constructs in a section (text keeps its
+     own tighter rhythm); margin-block so a block is spaced from any neighbor */
+  .cards, .stats, .bars, .flow, .layers, .tree, .split, table, .table-scroll, .chart,
+  .swimlane, .race, .diagram, .chartbox, pre, blockquote{margin-block:var(--rhythm)}
+
+  /* type scale — document-grade (modest, readable) */
+  .eyebrow{font-size:.85rem; letter-spacing:.14em; margin-bottom:.7rem}
+  h1{font-size:clamp(2rem,4.2vw,3.2rem); line-height:1.08; letter-spacing:-.02em; margin:0; font-weight:760; max-width:24ch}
+  h2{font-size:clamp(1.5rem,2.6vw,2.05rem); line-height:1.15; letter-spacing:-.01em; margin:0 0 .9rem; font-weight:700; max-width:28ch}
+  h3{font-size:1.2rem; margin:0 0 .4rem; font-weight:680}
+  p{font-size:clamp(1.05rem,1.2vw,1.18rem); margin:0 0 .9rem}
+  .lead{font-size:clamp(1.15rem,1.7vw,1.45rem); line-height:1.45; max-width:60ch}
+
+  .tldr{padding:1.5rem 1.7rem; max-width:74ch}
+  .tldr p{margin:.3rem 0 0; font-size:1.15rem}
+  .tldr p:first-child{margin-top:0}
+
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:var(--gap-wide); align-items:center}
+  .split.rev>*:first-child{order:2}
+  .split h2{max-width:none}
+  @media(max-width:760px){.split{grid-template-columns:1fr; gap:1.5rem}}
+
+  ul.points{padding:0; margin:0; display:grid; gap:var(--gap)}
+  ul.points li{font-size:1.15rem; padding-left:1.5rem; max-width:70ch}
+  ul.points li small{font-size:.8em; margin-top:.15rem}
+
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:var(--gap)}
+  .card{padding:var(--pad)}
+  .card h3{margin-bottom:.5rem}
+  .card p{font-size:1rem; margin:0 0 .5rem}
+  .card ul{margin:.4rem 0 0; padding-left:1.1rem} .card li{font-size:.98rem; margin:.2rem 0}
+
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:var(--gap)}
+  .stat .n{font-size:clamp(2.2rem,4.5vw,3.4rem); font-weight:780; letter-spacing:-.02em; line-height:1}
+  .stat .l{margin-top:.35rem; font-size:1.05rem}
+
+  .quote{font-size:clamp(1.35rem,2.4vw,1.9rem); font-weight:640; line-height:1.3; letter-spacing:-.01em; max-width:34ch; margin:0}
+  .quote cite{display:block; font-size:1.05rem; font-weight:400; margin-top:.8rem; max-width:60ch}
+
+  table{font-size:1.08rem}
+  th,td{padding:.95rem 1.1rem}
+  thead th{font-size:.82rem; letter-spacing:.04em}
+
+  .bars{display:flex; align-items:flex-end; gap:var(--gap); height:34vh; min-height:200px}
+  .bar{flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:.4rem}
+  .bar i{height:var(--v)} .bar b{font-size:1.2rem} .bar span{font-size:.95rem}
+
+  .flow{gap:var(--gap-tight)} .node{padding:var(--pad); font-size:1rem}
+  .node small{font-size:.78rem; margin-top:.2rem} .arrow{font-size:1.4rem}
+
+  pre{padding:1.1rem 1.3rem; font-size:1.05rem; line-height:1.55}
+
+  .options{display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); margin:.4rem 0 1rem}
+  .option{padding:1.1rem 1.2rem} .option b{font-size:1.15rem; margin-bottom:.35rem} .option p{font-size:1rem}
+  .ask{font-size:1.2rem; margin:.2rem 0 0}
+  .freeinput{margin-top:1.2rem; max-width:680px} .freeinput label{margin-bottom:.4rem; font-size:1.05rem}
+  .ask-input{font-size:1.05rem}
+
+  #composer{border-top:1px solid var(--line); background:var(--bg2); padding-block:clamp(2rem,5vh,3.5rem)}
+  #composer .wrap{display:flex; flex-direction:column; gap:.9rem}
+  #prompt-preview{padding:1rem 1.2rem; font-size:1.12rem; line-height:1.5}
+  #copy-btn{align-self:flex-start; padding:.8rem 1.5rem; font-size:1.05rem}
+
+  footer{border-top:1px solid var(--line); padding:2.2rem 0; font-size:.95rem}
+
+  body.js .reveal{opacity:0; transform:translateY(12px); transition:opacity .5s ease, transform .5s ease}
+  body.js .reveal.in{opacity:1; transform:none}
+  @media(prefers-reduced-motion:reduce){body.js .reveal{opacity:1; transform:none; transition:none}}
+</style>
+</head>
+<body>
+<div id="progress"><div id="bar"></div></div>
+<nav class="dots"></nav>
+
+{{BODY}}
+
+<footer><div class="wrap">Made to read · scroll to revisit · ⌘F to search</div></footer>
+
+<script>{{JS}}</script>
+</body>
+</html>

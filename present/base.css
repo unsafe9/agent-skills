@@ -1,0 +1,256 @@
+/* base.css — cross-structure vocabulary COSMETICS.
+   Loaded first; a skin loads after this and overrides cosmetics; the shell's
+   structural style block loads last and owns all sizing/positioning.
+
+   This file owns ONLY structure-neutral cosmetics for every vocabulary class:
+   colors (via tokens), fills, borders, radii, interaction states, and the
+   internal layout of a vocabulary block that is the SAME in scroll and slides
+   (e.g. a card is a filled bordered box; a table has bottom-ruled cells).
+
+   It must NOT own: the type scale (h1/h2/h3/p/.lead font-size), container
+   widths (--maxw/--prose/--pad), section/.slide spacing rhythm, mode/nav/footer
+   positioning, or .reveal. Those are structural and live in the shell. */
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--fg); font-family:var(--font);
+  -webkit-font-smoothing:antialiased}
+
+/* inline text vocabulary — color only, sizing is structural */
+strong{color:var(--fg)}
+.accent{color:var(--accent)}
+a{color:var(--accent)}
+code{font-family:var(--mono)}
+
+/* progress bar fill (the bar's position/height is structural) */
+#bar{background:var(--accent)}
+
+/* TL;DR / at-a-glance box */
+.tldr{background:var(--bg2); border:1px solid var(--line); border-left:3px solid var(--accent);
+  border-radius:var(--radius)}
+
+/* bands — full-bleed accent treatment, structure-agnostic */
+.band{background:var(--bg2)}
+.band--accent{background:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--bg))); color:#0b0d12}
+.band--accent .eyebrow,.band--accent .kicker{color:#0b0d12; opacity:.75}
+.band--accent h2,.band--accent .quote,.band--accent blockquote{color:#0b0d12}
+.band--accent p,.band--accent .lead,.band--accent li,.band--accent .quote cite,.band--accent blockquote cite{color:#0b0d12; opacity:.78}
+.band--accent .stat .l{color:#0b0d12; opacity:.72}
+
+/* eyebrow / kicker — accent label cosmetics (uppercase rhythm is shared, color is cosmetic) */
+.eyebrow,.kicker{color:var(--accent); text-transform:uppercase; font-weight:600}
+
+/* lead / muted prose — muted color only */
+.lead{color:var(--muted)}
+
+/* bullet points — the dot marker is a vocabulary decoration */
+ul.points{list-style:none}
+ul.points li{position:relative}
+ul.points li::before{content:""; position:absolute; left:0; top:.6em; width:.5rem; height:.5rem;
+  border-radius:50%; background:var(--accent)}
+ul.points li small{display:block; color:var(--muted)}
+
+/* two-column sub-headings */
+.col h3{color:var(--muted); text-transform:uppercase}
+
+/* cards — filled, bordered surface */
+.card{background:var(--bg2); border:1px solid var(--line); border-radius:var(--radius)}
+.band .card{background:var(--bg)}
+.card p{color:var(--muted)}
+.card ul li{color:var(--muted)}
+
+/* stats / big numbers */
+.stat .l{color:var(--muted)}
+.stat .n.good{color:var(--good)} .stat .n.bad{color:var(--bad)} .stat .n.accent{color:var(--accent)}
+
+/* verdict chip — compare-matrix cell judgement, skin-driven semantics */
+.verdict{font-weight:700; text-transform:uppercase}
+.verdict.good{color:var(--good)} .verdict.warn{color:var(--warn,#c98a00)} .verdict.bad{color:var(--bad)}
+
+/* quote / blockquote */
+.quote cite{color:var(--muted); font-style:normal}
+blockquote{border-left:4px solid var(--accent)}
+blockquote cite{color:var(--muted); font-style:normal}
+
+/* comparison table — ruled cells */
+table{width:100%; border-collapse:collapse}
+th,td{text-align:left; border-bottom:1px solid var(--line); vertical-align:top}
+thead th{color:var(--muted); font-weight:600; text-transform:uppercase}
+tbody th{font-weight:600}
+td .yes{color:var(--good)} td .no{color:var(--bad)}
+.nw{white-space:nowrap}
+.table-scroll{overflow-x:auto; max-width:100%}
+
+/* charts (inline SVG) */
+.chart{width:100%; height:auto; display:block}
+.chart .grid{stroke:var(--line); stroke-width:1}
+.chart .area{fill:var(--accent); opacity:.14}
+.chart .line{fill:none; stroke:var(--accent); stroke-width:3; stroke-linejoin:round; stroke-linecap:round}
+.chart .dot{fill:var(--accent)}
+.chart text{fill:var(--muted); font-family:var(--font)}
+
+/* pure-CSS bar chart */
+.bar i{display:block; width:100%; background:var(--accent); border-radius:8px 8px 0 0; min-height:4px}
+.bar span{color:var(--muted)}
+
+/* deliberate SVG diagram */
+.diagram{width:100%; height:auto; display:block}
+.diagram .dbox{fill:var(--bg2); stroke:var(--line)}
+.diagram .dt{fill:var(--fg); font-weight:700; text-anchor:middle; font-family:var(--font)}
+.diagram .ds{fill:var(--muted); text-anchor:middle; font-family:var(--font)}
+.diagram .dconn{stroke:var(--accent); fill:none}
+.diagram marker path{fill:var(--accent)}
+
+/* trivial single-row pipeline */
+.flow{display:flex; align-items:stretch; flex-wrap:nowrap}
+.node{flex:1 1 0; min-width:0; background:var(--bg2); border:1px solid var(--line);
+  border-radius:10px; font-weight:600; text-align:center}
+.node small{display:block; color:var(--muted); font-weight:400}
+.arrow{flex:0 0 auto; color:var(--accent); align-self:center}
+
+/* code */
+pre{background:var(--code-bg); border:1px solid var(--line); border-radius:var(--radius); overflow:auto; margin:0}
+pre code{color:#cdd6f4}
+.cmt{color:var(--muted)} .key{color:var(--accent)} .str{color:var(--good)}
+
+/* speaker notes */
+.notes{border-left:3px solid var(--muted); background:var(--bg2); color:var(--muted)}
+.notes::before{content:"Speaker notes"; display:block; text-transform:uppercase; opacity:.7}
+
+/* ---- interactive decision ---- */
+.decision{display:block}
+.decision+.decision{margin-top:1.5rem}
+.option{background:var(--bg2); border:1px solid var(--line); border-radius:var(--radius);
+  font:inherit; color:inherit; text-align:left; width:100%; cursor:pointer;
+  transition:border-color .15s, box-shadow .15s, background .15s}
+.option:hover{border-color:var(--accent)}
+.option.sel{border-color:var(--accent); box-shadow:inset 0 0 0 2px var(--accent);
+  background:color-mix(in srgb, var(--accent) 12%, var(--bg2))}
+.option b{display:block}
+.option p{margin:0; color:var(--muted)}
+.option.pick b::after{content:" · my lean"; color:var(--accent); font-weight:600; letter-spacing:.04em}
+.ask{color:var(--accent); font-weight:600}
+.freeinput label{display:block; color:var(--muted)}
+.ask-input{background:var(--bg2); border:1px solid var(--line); border-radius:10px; color:var(--fg);
+  font:inherit; resize:vertical; display:block; width:100%; min-height:5rem; padding:.85rem 1rem; line-height:1.5}
+.ask-input:focus{outline:none; border-color:var(--accent)}
+
+/* ---- prompt composer ---- */
+#prompt-preview{white-space:pre-wrap; background:var(--bg); border:1px dashed var(--line);
+  border-radius:10px; font-family:var(--font); color:var(--fg); margin:0}
+#copy-btn{background:var(--accent); color:#0b0d12; border:0; border-radius:10px;
+  font:inherit; font-weight:700; cursor:pointer}
+#copy-btn:hover{filter:brightness(1.08)}
+
+/* footer / nav chrome — cosmetics only (positioning is structural) */
+footer{color:var(--muted)}
+.fbtn{background:none; border:1px solid var(--line); color:var(--muted); font:inherit;
+  border-radius:7px; cursor:pointer}
+.fbtn:hover{border-color:var(--accent); color:var(--fg)}
+
+/* side dot nav (scroll) */
+nav.dots a{border-radius:50%; background:var(--line); transition:background .2s, transform .2s}
+nav.dots a:hover{transform:scale(1.3)}
+nav.dots a.on{background:var(--accent)}
+
+/* overview grid items (slides) */
+.ov-item{background:var(--bg2); border:1px solid var(--line); border-radius:10px;
+  color:var(--fg); font:inherit; cursor:pointer; text-align:left}
+.ov-item:hover{border-color:var(--accent)}
+.ov-item.cur{border-color:var(--accent); outline:1px solid var(--accent)}
+.ov-num{color:var(--accent); font-weight:700}
+
+/* swatch / legend — a flex row of color-keyed items (status legend, diagram key).
+   Structure-agnostic: the legend flexes; the swatch is a small token-colored chip.
+   (dashboard + diagram add their own placement; this is the shared cosmetic.) */
+.legend{display:flex; flex-wrap:wrap}
+.legend span{display:inline-flex; align-items:center}
+.swatch{display:inline-block; border-radius:3px; background:var(--muted)}
+.swatch.a{background:var(--accent)} .swatch.b{background:var(--good)} .swatch.bad{background:var(--bad)}
+
+/* ---- shared diagram primitives (structure-neutral; sized per shell) ---- */
+
+/* file/dir tree — connector lines drawn with borders, mono labels */
+.tree{font-family:var(--mono); list-style:none}
+.tree ul{list-style:none}
+.tree li{position:relative}
+.tree li::before{content:""; position:absolute; border-left:1px solid var(--line)}
+.tree li::after{content:""; position:absolute; border-bottom:1px solid var(--line)}
+.tree li:last-child::before{height:auto}
+.t-dir{color:var(--accent); font-weight:600}
+.t-file{color:var(--fg); overflow-wrap:anywhere}
+
+/* stacked abstraction layers — rectangular boxes, text reflows */
+.layers{display:flex; flex-direction:column}
+.layer{background:var(--bg2); border:1px solid var(--line); border-radius:var(--radius)}
+.layer b{color:var(--fg)}
+.layer span{color:var(--muted)}
+.layer--accent{background:color-mix(in srgb,var(--accent) 12%,var(--bg2)); border-color:var(--accent)}
+
+/* sequence diagram — actors as columns, time downward (inline SVG, viewBox) */
+.swimlane,.race{width:100%; height:auto; display:block}
+.swimlane .lane,.race .lane{stroke:var(--line); stroke-dasharray:4 4}
+.swimlane .actor,.race .actor{fill:var(--fg); font-weight:700; text-anchor:middle; font-family:var(--font)}
+.swimlane .active{fill:var(--bg2); stroke:var(--accent)}
+.swimlane .msg{stroke:var(--accent); fill:none}
+.swimlane .msg--return{stroke:var(--muted); stroke-dasharray:5 4; fill:none}
+.swimlane .mlabel{fill:var(--muted); text-anchor:middle; font-family:var(--font)}
+.swimlane marker path,.race marker path{fill:var(--accent)}
+
+/* concurrency interleaving — happens-before across lanes + a highlightable race window */
+.race .race-window{fill:color-mix(in srgb,var(--bad) 12%,transparent); stroke:var(--bad); stroke-dasharray:6 4}
+.race .ev{fill:var(--bg); stroke:var(--accent); stroke-width:2}
+.race .evt.bad .ev{stroke:var(--bad); fill:color-mix(in srgb,var(--bad) 18%,var(--bg))}
+.race .evt-l{fill:var(--fg); font-family:var(--font)}
+.race .hb{stroke:var(--muted); fill:none}
+.race .hb--cross{stroke:var(--accent)}
+.race .hb--race{stroke:var(--bad); stroke-width:2.5}
+/* engine step highlight: a lit event group reads at full strength, the rest recede */
+.stage.stepping .evt{opacity:.3; transition:opacity .25s}
+.stage.stepping .evt.lit{opacity:1}
+
+/* ---- verdict-visualization primitives (compare canvas + inline anywhere) ---- */
+
+/* Harvey-ball rating — ONE circle whose fill fraction encodes a score so the
+   reader SCANS the per-criterion winner by pattern, not by reading text.
+   `--v` is 0..1; the conic-gradient fills that fraction in the accent color. A
+   `.bad`/`.warn`/`.good` modifier recolors the fill so direction reads too. */
+.rate{display:inline-block; width:1.05em; height:1.05em; border-radius:50%; vertical-align:-.16em;
+  border:1.5px solid var(--accent);
+  background:conic-gradient(var(--accent) calc(var(--v,0)*360deg), transparent 0)}
+.rate.good{border-color:var(--good); background:conic-gradient(var(--good) calc(var(--v,0)*360deg), transparent 0)}
+.rate.warn{border-color:var(--warn,#c98a00); background:conic-gradient(var(--warn,#c98a00) calc(var(--v,0)*360deg), transparent 0)}
+.rate.bad{border-color:var(--bad); background:conic-gradient(var(--bad) calc(var(--v,0)*360deg), transparent 0)}
+/* a cell tinted by its own score — the heat encoding for the matrix grid */
+.cell.heat{background:color-mix(in srgb, var(--accent) calc(var(--v,0)*22%), transparent)}
+.cell.heat.good{background:color-mix(in srgb, var(--good) calc(var(--v,0)*26%), transparent)}
+.cell.heat.warn{background:color-mix(in srgb, var(--warn,#c98a00) calc(var(--v,0)*26%), transparent)}
+.cell.heat.bad{background:color-mix(in srgb, var(--bad) calc(var(--v,0)*26%), transparent)}
+/* the best cell in a criterion row — a thin accent ring marks the row winner */
+.cell.win{box-shadow:inset 0 0 0 2px var(--accent)}
+
+/* radar / spider overlay — each candidate's strength/weakness profile as a
+   filled polygon over a shared criterion web; something a table cannot show.
+   Authored inline SVG (viewBox, scales, no horizontal scroll). */
+.radar{width:100%; height:auto; display:block}
+.radar .web{stroke:var(--line); fill:none}
+.radar .spoke{stroke:var(--line)}
+.radar .axis-l{fill:var(--muted); font-family:var(--font)}
+.radar .blob{fill:var(--accent); fill-opacity:.16; stroke:var(--accent); stroke-width:2; stroke-linejoin:round}
+.radar .blob.b{fill:var(--good); stroke:var(--good)}
+.radar .blob.c{fill:var(--bad); stroke:var(--bad)}
+.radar .blob-dot{fill:var(--accent)} .radar .blob.b ~ .blob-dot,.radar .blob-dot.b{fill:var(--good)} .radar .blob-dot.c{fill:var(--bad)}
+
+/* weighted scorecard — per-criterion weight drives a computed total per
+   candidate; the ranked winner is highlighted, dominated candidates marked.
+   Authored numbers drive it (static, no JS): the bar width is `--v` (0..1). */
+.scored{display:flex; flex-direction:column}
+.scored .sc-row{display:grid; grid-template-columns:1fr auto; align-items:center; gap:.8rem}
+.scored .sc-row .sc-name b{color:var(--fg)}
+.scored .sc-row .sc-name span{color:var(--muted)}
+.scored .sc-track{background:var(--bg); border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.scored .sc-fill{display:block; height:100%; width:calc(var(--v,0)*100%); background:var(--accent); border-radius:999px}
+.scored .sc-total{font-weight:800; color:var(--fg); font-variant-numeric:tabular-nums}
+.scored .sc-row.win .sc-name b::after{content:" · winner"; color:var(--accent); font-weight:700; letter-spacing:.03em; text-transform:uppercase; font-size:.72em}
+.scored .sc-row.win .sc-fill{background:var(--good)}
+.scored .sc-row.out{opacity:.5}
+.scored .sc-row.out .sc-name b::after{content:" · dominated"; color:var(--bad); font-weight:600; font-size:.72em; text-transform:uppercase}

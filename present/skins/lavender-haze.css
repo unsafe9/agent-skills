@@ -1,0 +1,40 @@
+/* skin: lavender-haze — soft lilac light with a deep violet accent.
+   MOOD: a calm dusk study — pale lavender paper, plum ink, a confident violet
+   signal. Gentle and contemplative, the purple counterpart to warm-paper's
+   rust, playful-light's blue, and sage-press's green.
+   GLOBAL skin: works on any structure. Owns ONLY :root tokens and
+   structure-agnostic decoration. NEVER structural sizing. Loaded after
+   base.css, before the shell — so its :root wins over base/dark tokens and the
+   shell's structural sizing still wins over everything.
+
+   Contrast: every surface keeps dark ink on a light fill; the accent band is a
+   pale lilac wash with dark violet text (NOT inverted white-on-accent). */
+:root{
+  --bg:#f3f0fa; --bg2:#fbfaff; --line:#e2dcef;
+  --fg:#211d2e; --muted:#6a6280;
+  --accent:#6d4bd6; --good:#2f8f5e; --bad:#cf4636;
+  --code-bg:#ece7fa;
+  --radius:16px;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+
+/* lavender-haze accent band: pale lilac wash, dark violet text — NOT inverted.
+   Overrides base's dark-text-on-bright-accent so contrast holds on light. */
+.band--accent{background:linear-gradient(135deg, #e7e0f7, #f2eefb); color:var(--fg)}
+.band--accent .eyebrow,.band--accent .kicker{color:#5a39c0; opacity:1}
+.band--accent h2,.band--accent .quote,.band--accent blockquote{color:var(--fg)}
+.band--accent p,.band--accent li{color:var(--fg); opacity:1}
+.band--accent .lead,.band--accent .quote cite,.band--accent blockquote cite{color:var(--muted); opacity:1}
+.band--accent .stat .l{color:var(--muted); opacity:1}
+
+/* dark plum code text on the light lilac slab */
+pre code{color:#2a2438}
+.cmt{color:var(--muted)} .key{color:var(--accent)} .str{color:var(--good)}
+
+/* composer button: white label on the deep violet fill */
+#copy-btn{color:#ffffff}
+
+/* links: a violet underline on the lilac paper */
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(109,75,214,.4)}
+a:hover{border-bottom-color:var(--accent)}
