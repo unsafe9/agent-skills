@@ -54,6 +54,10 @@ beats an exhaustive one that buries the point. Apply the same restraint to struc
 before opening a new section for a rule, check whether it fits an existing one as a
 bullet or a clause — grow a section rather than multiply them.
 
+Default to English for the instruction text and any output you produce — it's the
+model's strongest and most token-efficient language — even when the surrounding
+conversation is in another language.
+
 ## Stay host-neutral
 
 Keep shared instructions host-neutral unless a section is explicitly documenting a
@@ -70,6 +74,11 @@ Do not prescribe meta-discovery steps like "use a tool-search tool to find the
 right tool, then use that tool". State the needed capability, the source
 preference, and the selection criteria; let the current host discover and choose
 its own tools.
+
+Likewise, when authoring a skill, don't wire in a dependency on another named
+skill unless the user asked for that coupling. Name the underlying capability or
+tool and use it directly, so the skill stands alone if the other skill is
+renamed, moved, or absent.
 
 ## Generalize from incidents
 
