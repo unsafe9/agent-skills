@@ -1,0 +1,9 @@
+/* decision.css — sizing for the `decision` block.
+   Cosmetics (colors, borders, interaction states for .decision/.option/.ask-input/
+   #prompt-preview/#copy-btn) are already in base.css and apply globally.
+   Structural sizing for .options/.option/.ask/.freeinput/.ask-input/#composer/
+   #prompt-preview/#copy-btn is in scroll.shell.html's page-structural <style>.
+   This file adds only the decision-specific layout rhythm not covered above. */
+
+.decision{margin-block:var(--rhythm)}
+.decision h2{margin-bottom:.8rem}

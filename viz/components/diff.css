@@ -1,0 +1,29 @@
+/* diff.css — unified diff: colored +/-/@@ lines over a code-bg pre, optional
+   two-column (old | new) line-number gutter. Cosmetics lifted from present/base.css (pre). */
+
+/* lifted from present base.css */
+pre{background:var(--code-bg); border:1px solid var(--line); border-radius:var(--radius); overflow:auto; margin:0}
+pre code{color:var(--fg)}
+
+/* sizing — lifted from present scroll/shell.html structural <style> */
+pre{padding:1.1rem 1.3rem; font-size:1.05rem; line-height:1.55; margin-block:var(--rhythm)}
+
+/* diff header (filename) */
+.diff-header{font-family:var(--mono); font-size:.88rem; color:var(--muted);
+  background:var(--bg2); border:1px solid var(--line); border-bottom:none;
+  border-radius:var(--radius) var(--radius) 0 0;
+  padding:.4rem 1rem; margin-block:var(--rhythm); margin-bottom:0}
+.diff-header + pre{border-top-left-radius:0; border-top-right-radius:0; margin-top:0}
+
+/* per-line rows — each row is a block so the color tint stretches full width */
+pre code .cl{display:block; min-height:1.55em; margin-inline:-1.3rem; padding-inline:1.3rem}
+pre code .lc{white-space:pre}
+.diff-add{color:var(--good); background:color-mix(in srgb, var(--good) 10%, transparent)}
+.diff-del{color:var(--bad); background:color-mix(in srgb, var(--bad) 10%, transparent)}
+.diff-hunk{color:var(--accent); opacity:.75}
+.diff-ctx{color:var(--muted)}
+
+/* two-column line-number gutter (only on pre.lined; --gw = digit count) */
+pre.lined code .ln{display:inline-block; width:var(--gw); padding-right:1ch;
+  text-align:right; color:var(--muted); opacity:.5; user-select:none}
+pre.lined code .ln + .ln{padding-right:1.4ch}

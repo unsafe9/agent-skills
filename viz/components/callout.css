@@ -1,0 +1,26 @@
+/* callout.css — boxed aside with a tone-coloured left edge. */
+
+.callout{background:var(--bg2); border:1px solid var(--line);
+  border-left-width:4px; border-radius:var(--radius);
+  padding:1.1rem 1.4rem; margin-block:var(--rhythm); max-width:74ch}
+
+/* tone variants — left-edge accent colour */
+.callout--note{border-left-color:var(--accent)}
+.callout--tip{border-left-color:var(--good)}
+.callout--warn{border-left-color:var(--warn,color-mix(in srgb,var(--bad) 55%,var(--accent)))}
+.callout--danger{border-left-color:var(--bad)}
+
+/* title lead-in */
+.callout-title{display:block; margin-bottom:.45rem; font-size:1rem}
+.callout--note .callout-title{color:var(--accent)}
+.callout--tip  .callout-title{color:var(--good)}
+.callout--warn .callout-title{color:var(--warn,color-mix(in srgb,var(--bad) 55%,var(--accent)))}
+.callout--danger .callout-title{color:var(--bad)}
+
+/* body text */
+.callout-body p{margin:0 0 .5rem; font-size:1.05rem}
+.callout-body p:last-child{margin-bottom:0}
+.callout-body ul{margin:.3rem 0 .5rem; padding-left:1.3rem}
+.callout-body li{margin:.2rem 0}
+.callout-body code{background:var(--bg); border:1px solid var(--line);
+  border-radius:4px; padding:.1em .3em; font-size:.9em}

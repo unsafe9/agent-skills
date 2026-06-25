@@ -1,0 +1,28 @@
+/* group.css — a titled cluster of child blocks under one heading and one shared
+   section padding, optionally two columns. Children render as ordinary sections;
+   these rules strip their individual section chrome so the cluster reads as one
+   unit. tone:accent paints a subtle full-bleed accent-tinted panel — a token mix
+   that stays readable on every skin (no text inversion). Tree-shaken in only when
+   a `group` block appears. */
+
+.group h2{margin-bottom:1rem}
+
+/* tone:accent — a subtly accent-tinted full-bleed band; --fg text and child boxes
+   stay readable because the fill is mostly the surface colour. */
+.group--accent{background:color-mix(in srgb, var(--accent) 10%, var(--bg2))}
+
+/* the cluster grid — one column by default, two when group--cols2 */
+.group-grid{display:grid; gap:var(--gap-wide)}
+.group--cols2 .group-grid{grid-template-columns:1fr 1fr; align-items:start}
+@media(max-width:760px){.group--cols2 .group-grid{grid-template-columns:1fr}}
+
+/* children flow inline inside the cluster — drop their full-section chrome (outer
+   padding + centred width container) so each fills its grid cell and the group's
+   single section padding governs the whole cluster's rhythm. */
+.group-grid > section{padding-block:0}
+.group-grid > section > div{max-width:none; margin:0; padding-inline:0}
+
+/* a child's own leading/trailing block margin would double the grid gap — trim it
+   so the cluster stays tight. */
+.group-grid > section > div > :first-child{margin-top:0}
+.group-grid > section > div > :last-child{margin-bottom:0}

@@ -1,0 +1,19 @@
+/* stats.css — EVERYTHING specific to the `stats` block: its cosmetics (lifted
+   from present base.css) and its sizing (lifted from the present scroll shell).
+   Tree-shaken into the page only when a `stats` block appears in the data. */
+
+/* cosmetics — color the label and tone the number */
+.stat .l{color:var(--muted)}
+.stat .n.good{color:var(--good)} .stat .n.bad{color:var(--bad)} .stat .n.accent{color:var(--accent)}
+.stat .delta{color:var(--muted)}
+
+/* sizing — the metric grid + big-number scale. The number font is capped so it
+   never outgrows its column on a wide viewport (an uncapped vw size made adjacent
+   numbers overflow their cells and collide); the column min-width holds a typical
+   big number without overflow, and min-width:0 keeps a long one from blowing out
+   the grid. */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:var(--gap-wide) var(--gap); margin-block:var(--rhythm)}
+.stat{min-width:0}
+.stat .n{font-size:clamp(1.9rem,2.8vw,2.6rem); font-weight:780; letter-spacing:-.02em; line-height:1.05; white-space:nowrap}
+.stat .l{margin-top:.35rem; font-size:1.05rem}
+.stat .delta{margin-top:.25rem; font-size:.9rem; font-weight:600}

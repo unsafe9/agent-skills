@@ -1,0 +1,30 @@
+/* code.css — code block: header bar + monospace pre, syntax tokens, highlighted
+   rows, optional line-number gutter. Cosmetics lifted from present/base.css
+   (pre, code, .cmt/.key/.str — base.css already colors those; only .num is new). */
+
+/* lifted from present base.css */
+pre{background:var(--code-bg); border:1px solid var(--line); border-radius:var(--radius); overflow:auto; margin:0}
+pre code{color:var(--fg)}
+.num{color:var(--accent)}
+
+/* sizing — lifted from present scroll/shell.html structural <style> */
+pre{padding:1.1rem 1.3rem; font-size:1.05rem; line-height:1.55; margin-block:var(--rhythm)}
+
+/* header bar: filename left, lang badge right */
+.code-header{display:flex; justify-content:space-between; align-items:center;
+  background:var(--bg2); border:1px solid var(--line); border-bottom:none;
+  border-radius:var(--radius) var(--radius) 0 0;
+  padding:.4rem 1rem; margin-block:var(--rhythm); margin-bottom:0}
+.code-header + pre{border-top-left-radius:0; border-top-right-radius:0; margin-top:0}
+.code-filename{font-family:var(--mono); font-size:.88rem; color:var(--fg)}
+.code-lang{font-size:.75rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+
+/* per-line rows: each row is a block so a highlight tint stretches full width
+   (negative margin + padding bleed it into the pre's own padding) */
+pre code .cl{display:block; min-height:1.55em; margin-inline:-1.3rem; padding-inline:1.3rem}
+pre code .cl.hl{background:color-mix(in srgb, var(--accent) 14%, transparent)}
+pre code .lc{white-space:pre}
+
+/* line-number gutter (only on pre.lined; --gw = digit count, set inline) */
+pre.lined code .ln{display:inline-block; width:var(--gw); padding-right:1.4ch;
+  text-align:right; color:var(--muted); opacity:.55; user-select:none}

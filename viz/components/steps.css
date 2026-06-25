@@ -1,0 +1,27 @@
+/* steps.css — ordered procedure with styled numeric markers. */
+
+ol.steps{list-style:none; padding:0; margin:0 0 var(--rhythm); counter-reset:step;
+  display:flex; flex-direction:column; gap:var(--gap)}
+
+ol.steps li{counter-increment:step; display:grid;
+  grid-template-columns:2.4rem 1fr; gap:.75rem 1rem; align-items:start}
+
+/* numeric bubble */
+ol.steps li::before{content:counter(step); display:flex; align-items:center;
+  justify-content:center; width:2.4rem; height:2.4rem; border-radius:50%;
+  background:var(--accent); color:var(--bg); font-weight:800;
+  font-size:.95rem; flex-shrink:0; line-height:1}
+
+/* title — pinned to the content column so the bubble keeps col 1 to itself */
+.step-title{grid-column:2; display:block; font-size:1.1rem; font-weight:680;
+  padding-top:.45rem; line-height:1.25}
+
+/* body detail — also in the content column (else it falls under the bubble and
+   collapses to a ~2.4rem strip, wrapping CJK text one glyph per line) */
+.step-body{grid-column:2; margin-top:.35rem}
+.step-body p{margin:0 0 .5rem; font-size:1rem; color:var(--muted)}
+.step-body p:last-child{margin-bottom:0}
+.step-body ul{margin:.25rem 0 .5rem; padding-left:1.2rem}
+.step-body li{color:var(--muted); font-size:.97rem; margin:.2rem 0}
+.step-body code{background:var(--bg2); border:1px solid var(--line);
+  border-radius:4px; padding:.1em .3em; font-size:.9em}

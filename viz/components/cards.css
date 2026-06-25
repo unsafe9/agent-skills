@@ -1,0 +1,25 @@
+/* cards.css — cosmetics + sizing for the `cards` block.
+   Cosmetics lifted from present base.css (.card surface rules).
+   Sizing lifted from present scroll shell (.cards grid + .card padding). */
+
+/* grid — auto-fit; 4-card row balances to 2×2 (lifted from prose.css) */
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:var(--gap); margin-block:var(--rhythm)}
+@media(min-width:560px){
+  .cards:has(> .card:nth-child(4):last-child){grid-template-columns:repeat(2,1fr)}
+}
+
+/* card surface — from base.css. min-width:0 lets a grid track shrink so a long
+   unbreakable token (code path, identifier) wraps instead of blowing out the column. */
+.card{background:var(--bg2); border:1px solid var(--line); border-radius:var(--radius); padding:var(--pad); position:relative; min-width:0}
+.card h3{margin:0 0 .5rem; overflow-wrap:anywhere}
+.card p{color:var(--muted); font-size:1rem; margin:0 0 .5rem; overflow-wrap:anywhere}
+.card ul{margin:.4rem 0 0; padding-left:1.1rem}
+.card li{color:var(--muted); font-size:.98rem; margin:.2rem 0; overflow-wrap:anywhere}
+
+/* badge tag — an eyebrow above the title; sits in normal flow so a long badge
+   never overlaps the heading (it wraps onto its own line instead) */
+.badge-tag{display:inline-block; margin:0 0 .55rem; font-size:.75rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:.06em; color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,var(--bg2));
+  border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
+  border-radius:999px; padding:.15rem .55rem}

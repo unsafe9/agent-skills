@@ -1,0 +1,54 @@
+/* annotated.css — per-line code review: code cell + note cell laid out as rows.
+   Mono column keeps the code-block look (var(--code-bg)); marks tint whole rows. */
+
+/* header bar (filename + lang) — matches code.css */
+.annotated .anno-header{display:flex; justify-content:space-between; align-items:center;
+  background:var(--bg2); border:1px solid var(--line); border-bottom:none;
+  border-radius:var(--radius) var(--radius) 0 0;
+  padding:.4rem 1rem; margin-block:var(--rhythm); margin-bottom:0}
+.annotated .code-filename{font-family:var(--mono); font-size:.88rem; color:var(--fg)}
+.annotated .code-lang{font-size:.75rem; font-weight:600; text-transform:uppercase;
+  letter-spacing:.08em; color:var(--muted)}
+
+/* grid container — same frame as a code block */
+.annotated .anno-grid{background:var(--code-bg); border:1px solid var(--line);
+  border-radius:var(--radius); overflow:hidden; margin-block:var(--rhythm)}
+.annotated .anno-header + .anno-grid{border-top-left-radius:0; border-top-right-radius:0; margin-top:0}
+
+/* each line is a 2-col grid row: code | note. The mark tint paints the whole row. */
+.annotated .anno-row{display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 18rem);
+  align-items:stretch; border-left:3px solid transparent}
+
+/* code cell — verbatim, indentation preserved via white-space:pre */
+.annotated .anno-code{font-family:var(--mono); font-size:1.0rem; line-height:1.55;
+  color:var(--fg); white-space:pre; overflow-x:auto;
+  padding:.15rem 1.1rem; min-height:1.55em}
+
+/* note cell — commentary, distinct from code, on the panel bg */
+.annotated .anno-note{font-size:.9rem; line-height:1.5; color:var(--muted);
+  padding:.15rem 1rem; border-left:1px solid var(--line); background:var(--bg)}
+.annotated .anno-note code{font-family:var(--mono); font-size:.85em;
+  background:var(--bg2); border-radius:calc(var(--radius) / 2); padding:.05em .35em; color:var(--fg)}
+.annotated .anno-note strong{color:var(--fg)}
+.annotated .anno-note a{color:var(--accent)}
+.annotated .anno-note-empty{background:transparent; border-left-color:transparent}
+
+/* mark tints — left accent border + faint row wash, tokens only */
+.annotated .anno-add{border-left-color:var(--good);
+  background:color-mix(in srgb, var(--good) 9%, transparent)}
+.annotated .anno-del{border-left-color:var(--bad);
+  background:color-mix(in srgb, var(--bad) 9%, transparent)}
+.annotated .anno-warn{border-left-color:var(--accent);
+  background:color-mix(in srgb, var(--accent) 10%, transparent)}
+.annotated .anno-focus{border-left-color:var(--accent);
+  background:color-mix(in srgb, var(--accent) 16%, transparent)}
+
+/* marked rows keep note panel readable over the wash */
+.annotated .anno-row[class*="anno-"] .anno-note{background:transparent}
+
+/* narrow: stack note below its line, keep it tied via the shared row border */
+@media (max-width:640px){
+  .annotated .anno-row{grid-template-columns:1fr}
+  .annotated .anno-note{border-left:none; border-top:1px solid var(--line)}
+  .annotated .anno-note-empty{display:none}
+}

@@ -1,0 +1,43 @@
+/* donut.css — a proportion ring of SVG arcs plus a labeled legend. Every
+   selector is scoped under .donut so the generic class names (.seg, .track,
+   .hole, .ring, .row, .lab, .pct, .val) never leak to other components. Colors
+   are skin tokens only: toned slices read their stroke from the inline --seg
+   custom property; untoned slices cycle the p0-p4 palette derived from --accent
+   via color-mix, so every skin reskins the whole chart. */
+
+.donut{display:flex; flex-wrap:wrap; align-items:center;
+  gap:var(--rhythm); margin-bottom:var(--rhythm)}
+
+/* ring: the SVG sits under an absolutely-centered hole label */
+.donut .ring{position:relative; flex:0 0 auto; width:min(15rem, 60vw)}
+.donut .donut-svg{display:block; width:100%; height:auto;
+  transform:rotate(-90deg); transform-origin:center}  /* arcs start at 12 o'clock */
+
+.donut .track{stroke:var(--bg2)}                       /* full ring behind the arcs */
+.donut .seg{stroke:var(--seg, var(--accent))}          /* toned slice -> inline --seg */
+.donut .seg.p0{stroke:var(--accent)}
+.donut .seg.p1{stroke:color-mix(in srgb, var(--accent) 62%, var(--muted))}
+.donut .seg.p2{stroke:color-mix(in srgb, var(--accent) 38%, var(--bg2))}
+.donut .seg.p3{stroke:color-mix(in srgb, var(--accent) 82%, var(--fg))}
+.donut .seg.p4{stroke:var(--muted)}
+
+.donut .hole{position:absolute; inset:0; display:flex; align-items:center;
+  justify-content:center; pointer-events:none}
+.donut .hole span{max-width:62%; text-align:center; line-height:1.2;
+  font-size:1.15rem; font-weight:760; color:var(--fg)}
+
+/* legend */
+.donut .donut-legend{list-style:none; margin:0; padding:0; flex:1 1 12rem;
+  display:flex; flex-direction:column; gap:.45rem}
+.donut .donut-legend .row{display:grid; grid-template-columns:auto 1fr auto auto;
+  align-items:center; gap:.65rem; font-size:.95rem}
+.donut .sw{width:.85rem; height:.85rem; border-radius:3px; flex:0 0 auto;
+  background:var(--seg, var(--accent))}
+.donut .sw.p0{background:var(--accent)}
+.donut .sw.p1{background:color-mix(in srgb, var(--accent) 62%, var(--muted))}
+.donut .sw.p2{background:color-mix(in srgb, var(--accent) 38%, var(--bg2))}
+.donut .sw.p3{background:color-mix(in srgb, var(--accent) 82%, var(--fg))}
+.donut .sw.p4{background:var(--muted)}
+.donut .lab{color:var(--fg); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.donut .pct{color:var(--fg); font-weight:680; font-variant-numeric:tabular-nums}
+.donut .val{color:var(--muted); font-variant-numeric:tabular-nums}

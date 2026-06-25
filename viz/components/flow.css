@@ -1,0 +1,24 @@
+/* flow.css — EVERYTHING specific to the `flow` block. Classes lifted from
+   present (.diagram/.dbox/.dt/.ds/.dconn + the marker) so this cosmetic +
+   sizing layer colors them via skin tokens only. Injected only when a `flow`
+   block appears. */
+
+/* cosmetics — the SVG primitives (lifted from present base.css) */
+.diagram{max-width:100%; height:auto; display:block; margin-inline:auto}
+.diagram .dbox{fill:var(--bg2); stroke:var(--line)}
+.diagram .dt{fill:var(--fg); font-weight:700; text-anchor:middle; font-family:var(--font)}
+.diagram .ds{fill:var(--muted); text-anchor:middle; font-family:var(--font)}
+.diagram .dconn{stroke:var(--accent); fill:none}
+.diagram .dlabel{fill:var(--muted); text-anchor:middle; font-family:var(--font)}
+.diagram .dlabel-bg{fill:var(--bg)}
+.diagram marker path{fill:var(--accent)}
+
+/* sizing — intrinsic text + stroke legibility (lifted from present figures.css).
+   Bumped up because the SVG is downscaled to fit the band; a min-width floor plus
+   a scroll wrapper keep it legible instead of shrinking to nothing on narrow
+   viewports. */
+.diagram .dt{font-size:18px} .diagram .ds{font-size:13px}
+.diagram .dlabel{font-size:13px}
+.diagram .dconn{stroke-width:2.5}
+.diagram-scroll{overflow-x:auto; margin-block:var(--rhythm)}
+.diagram{min-width:640px}

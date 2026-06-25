@@ -1,0 +1,46 @@
+/* heatmap.css — sizing + shading for the `heatmap` block. Tree-shaken in only
+   when a heatmap appears. Colors come solely from skin tokens; cell fills are an
+   accent / --bg2 color-mix set inline per cell (intensity → strength). All
+   selectors scoped under .heatmap. */
+
+/* horizontal scroll when many columns; the grid keeps its intrinsic width */
+.heatmap .hm-scroll{overflow-x:auto; max-width:100%; margin-block:var(--rhythm)}
+
+/* one CSS grid: a leading label column + one track per data column.
+   --hm-cols is set inline from the column count. */
+.heatmap .hm-grid{
+  display:grid;
+  grid-template-columns:max-content repeat(var(--hm-cols), minmax(3.5rem, 1fr));
+  gap:2px;
+  min-width:max-content;
+}
+
+/* column headers (x axis) */
+.heatmap .hm-col{
+  color:var(--muted); font-weight:600; text-transform:uppercase; font-size:.82rem;
+  text-align:center; padding:.4rem .55rem; white-space:nowrap;
+}
+.heatmap .hm-corner{}
+
+/* row labels (y axis) — stay readable, pinned to the left edge */
+.heatmap .hm-rowlabel{
+  color:var(--fg); font-weight:600; font-size:.9rem;
+  display:flex; align-items:center; padding:.4rem .8rem .4rem 0;
+  white-space:nowrap;
+  position:sticky; left:0; background:var(--bg); z-index:1;
+}
+
+/* data cells — fill is an inline accent/--bg2 color-mix; text on faint cells */
+.heatmap .hm-cell{
+  display:flex; align-items:center; justify-content:center;
+  min-height:2.6rem; padding:.35rem .5rem;
+  border-radius:calc(var(--radius) - 8px);
+  color:var(--fg);
+}
+.heatmap .hm-v{font-size:.82rem; font-variant-numeric:tabular-nums}
+
+/* strong cells: flip value text to --bg so it reads over the dense accent */
+.heatmap .hm-strong{color:var(--bg)}
+
+/* missing/non-numeric cell: a neutral placeholder, no fill */
+.heatmap .hm-na{background:var(--bg2); opacity:.4}

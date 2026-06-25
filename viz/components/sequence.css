@@ -1,0 +1,21 @@
+/* sequence.css — EVERYTHING specific to the `sequence` block. Classes lifted
+   from present (.swimlane/.lane/.actor/.active/.msg/.msg--return/.mlabel + the
+   marker) so this layer colors them via skin tokens only. Injected only when a
+   `sequence` block appears. */
+
+/* cosmetics — the SVG primitives (lifted from present base.css) */
+.swimlane{width:100%; height:auto; display:block}
+.swimlane .lane{stroke:var(--line); stroke-dasharray:4 4}
+.swimlane .actor{fill:var(--fg); font-weight:700; text-anchor:middle; font-family:var(--font)}
+.swimlane .active{fill:var(--bg2); stroke:var(--accent)}
+.swimlane .msg{stroke:var(--accent); fill:none}
+.swimlane .msg--return{stroke:var(--muted); stroke-dasharray:5 4; fill:none}
+.swimlane .mlabel{fill:var(--muted); text-anchor:middle; font-family:var(--font)}
+.swimlane marker path{fill:var(--accent)}
+
+/* sizing — intrinsic text + stroke legibility (lifted from present figures.css) */
+.swimlane .actor{font-size:15px}
+.swimlane .mlabel{font-size:13px}
+.swimlane .msg,.swimlane .msg--return{stroke-width:2}
+.swimlane .lane{stroke-width:1.5}
+.swimlane{margin-block:var(--rhythm)}

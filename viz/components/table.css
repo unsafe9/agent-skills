@@ -1,0 +1,17 @@
+/* table.css — cosmetics + sizing for the `table` block.
+   Cosmetics lifted from present base.css (table/th/td/thead/tbody rules).
+   Tinted cells use tone classes: good, bad, warn. */
+
+/* ruled cells — cosmetics from base.css */
+table{width:100%; border-collapse:collapse}
+th,td{text-align:left; border-bottom:1px solid var(--line); vertical-align:top; padding:.55rem .75rem}
+thead th{color:var(--muted); font-weight:600; text-transform:uppercase; font-size:.88rem}
+tbody tr:last-child td{border-bottom:none}
+
+/* cell tinting */
+td.good{color:var(--good)}
+td.bad{color:var(--bad)}
+td.warn{color:var(--warn,#c98a00)}
+
+/* horizontal scroll wrapper for wide tables */
+.table-scroll{overflow-x:auto; max-width:100%; margin-block:var(--rhythm)}

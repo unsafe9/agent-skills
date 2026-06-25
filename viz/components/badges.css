@@ -1,0 +1,14 @@
+/* badges.css — cosmetics + sizing for the `badges` block.
+   All new: inline pill row with token-driven tone colors. */
+
+.badges{display:flex; flex-wrap:wrap; gap:.45rem; margin-block:var(--rhythm)}
+.badge{display:inline-block; font-size:.82rem; font-weight:650; letter-spacing:.04em;
+  padding:.25rem .75rem; border-radius:999px; border:1px solid var(--line);
+  background:var(--bg2); color:var(--muted)}
+
+/* tone variants — skin-token driven, no hardcoded colors */
+.badge.good{color:var(--good); background:color-mix(in srgb,var(--good) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--good) 30%,transparent)}
+.badge.bad{color:var(--bad); background:color-mix(in srgb,var(--bad) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+.badge.warn{color:var(--warn,#c98a00); background:color-mix(in srgb,var(--warn,#c98a00) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--warn,#c98a00) 30%,transparent)}
+.badge.accent{color:var(--accent); background:color-mix(in srgb,var(--accent) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
+.badge.muted{color:var(--muted); opacity:.7}

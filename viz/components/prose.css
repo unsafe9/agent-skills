@@ -1,0 +1,14 @@
+/* prose.css — reading-passage block cosmetics + prose column sizing.
+   The .prose container width is defined by the scroll shell; this file owns
+   the typographic rhythm and list decoration inside a prose block. */
+
+/* paragraph and list rhythm inside the prose block */
+.prose-block p{margin:0 0 .9rem}
+.prose-block p:last-child{margin-bottom:0}
+.prose-block ul{margin:.4rem 0 .9rem; padding-left:1.4rem}
+.prose-block li{margin:.25rem 0}
+.prose-block h2{margin-bottom:.8rem}
+
+/* inline code within prose */
+.prose-block code{background:var(--bg2); border:1px solid var(--line);
+  border-radius:4px; padding:.1em .35em; font-size:.92em}

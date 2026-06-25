@@ -1,0 +1,25 @@
+/* timeline.css — vertical event rail. New CSS; no present analog. */
+
+/* rail: a left border; each event hangs off it */
+.tl-rail{position:relative; padding-left:2rem; margin-block:var(--rhythm)}
+.tl-rail::before{content:""; position:absolute; left:.45rem; top:.4rem; bottom:.4rem;
+  width:2px; background:var(--line)}
+
+/* each event row */
+.tl-event{position:relative; margin-bottom:var(--gap); padding-bottom:var(--gap)}
+.tl-event:last-child{margin-bottom:0; padding-bottom:0}
+
+/* dot on the rail */
+.tl-dot{position:absolute; left:calc(-2rem + .35rem); top:.35rem;
+  width:.65rem; height:.65rem; border-radius:50%;
+  background:var(--muted); border:2px solid var(--bg)}
+.tl-dot.good{background:var(--good)}
+.tl-dot.bad{background:var(--bad)}
+.tl-dot.warn{background:var(--warn, #c98a00)}
+.tl-dot.accent{background:var(--accent)}
+
+/* event content */
+.tl-when{font-size:.8rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;
+  color:var(--muted); margin-bottom:.2rem}
+.tl-title{font-weight:700; color:var(--fg); line-height:1.3}
+.tl-body{margin-top:.35rem; color:var(--muted); font-size:.97rem; line-height:1.5}

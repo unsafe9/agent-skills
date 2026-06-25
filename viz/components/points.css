@@ -1,0 +1,14 @@
+/* points.css — scannable claim list. Cosmetics lifted from present base.css
+   (.points dot marker) plus structural sizing for the viz scroll context. */
+
+/* dot marker — lifted from present/base.css */
+ul.points{list-style:none; padding:0; margin:0; display:grid; gap:var(--gap)}
+ul.points li{position:relative; padding-left:1.5rem; font-size:1.15rem; max-width:70ch}
+ul.points li::before{content:""; position:absolute; left:0; top:.6em;
+  width:.5rem; height:.5rem; border-radius:50%; background:var(--accent)}
+
+/* claim text */
+.pt-text{display:block}
+
+/* detail sub-line */
+ul.points li small{display:block; color:var(--muted); font-size:.82em; margin-top:.15rem}

@@ -1,0 +1,34 @@
+/* waterfall.css — sizing + cosmetics for the `waterfall` block.
+   A single stacked bar (segments end-to-end, sized by share of the total) makes
+   "the parts sum to the total" literal; per-part rows carry the numbers; a ruled
+   Total row closes the sum. Colors are skin tokens only, so it reskins cleanly. */
+
+/* stacked total bar — every segment's width is its fraction of the sum */
+.waterfall .wf-stack{display:flex; width:100%; height:1.5rem; margin-block:var(--rhythm) var(--gap);
+  background:var(--bg2); border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.waterfall .wf-seg{display:block; height:100%; width:calc(var(--w,0)*100%); min-width:1px;
+  background:var(--muted); box-shadow:inset -1px 0 0 var(--bg)}
+.waterfall .wf-seg:last-child{box-shadow:none}
+.waterfall .wf-seg.good{background:var(--good)}
+.waterfall .wf-seg.bad{background:var(--bad)}
+.waterfall .wf-seg.accent{background:var(--accent)}
+
+/* per-part rows — color chip · label · value · share */
+.waterfall .wf-rows{display:flex; flex-direction:column}
+.waterfall .wf-row{display:grid; grid-template-columns:auto 1fr auto auto; align-items:center;
+  gap:.75rem; padding-block:.5rem; border-bottom:1px solid var(--line)}
+.waterfall .wf-chip{width:.7rem; height:.7rem; border-radius:3px; background:var(--muted)}
+.waterfall .wf-chip.good{background:var(--good)}
+.waterfall .wf-chip.bad{background:var(--bad)}
+.waterfall .wf-chip.accent{background:var(--accent)}
+.waterfall .wf-label{color:var(--fg); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.waterfall .wf-val{color:var(--fg); font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap}
+.waterfall .wf-pct{color:var(--muted); font-variant-numeric:tabular-nums; text-align:right;
+  min-width:2.8rem; white-space:nowrap}
+
+/* final cumulative total — heavier rule, accent emphasis, no leading chip */
+.waterfall .wf-total{grid-template-columns:1fr auto auto; border-bottom:0;
+  border-top:2px solid var(--line); margin-top:.25rem; padding-top:.7rem}
+.waterfall .wf-total .wf-label{font-weight:700}
+.waterfall .wf-total .wf-val{color:var(--accent); font-weight:720; font-size:1.1rem}
+.waterfall .wf-total .wf-pct{color:var(--fg)}

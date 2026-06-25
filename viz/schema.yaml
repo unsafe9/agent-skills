@@ -1,0 +1,684 @@
+# schema.yaml — the single source of truth for a viz page, and its authoring
+# reference: read this file directly, then write YAML that matches it. It is also
+# the machine-readable validation source (`build.py --check`). Edit it once and the
+# reference, the validation, and the coverage guard all move together. Every block
+# type declared under `blocks:` MUST have a matching components/<type>.py renderer,
+# and vice versa — build.py fails loudly on drift.
+#
+# A viz page is an ordered `blocks` list rendered top-to-bottom as one scrolling
+# page. Each block is a map `{type: <name>, ...fields}`. Lead with the answer, one
+# idea per block; let the data's shape pick the construct (a metric → stats, a
+# branch → flow). Write every user-facing field in the user's own voice/language.
+# Besides its own fields, every block also accepts an optional:
+#   nav: short side-rail dot label for the block (omit to leave it off the rail).
+#
+# Field-spec vocabulary (how each field is described below):
+#   required: bool          # default false
+#   kind: scalar|list|map|blocks  # default scalar; 'blocks' = a list of nested blocks (a container, e.g. group)
+#   enum: [..]              # allowed scalar values
+#   item: {<subfields>}     # when kind=list, the shape of each element
+#                           #   (subfields use this same spec, one level deep)
+#   desc: str              # human-facing; not validated
+
+page:
+  title:
+    required: true
+    desc: "page <title> and the hero headline at the top of the scroll"
+  eyebrow:
+    desc: "small kicker above the hero title — topic · context"
+  lead:
+    desc: "one framing sentence under the hero title (the page's lead)"
+  skin:
+    desc: "pin a skin by name; omit for a random curated skin"
+    enum:
+      - blueprint-dark
+      - lavender-haze
+      - midnight
+      - newsprint
+      - playful-light
+      - rose-noir
+      - sage-press
+      - terminal-mono
+      - tide-pool
+      - warm-paper
+  composer:
+    kind: map
+    desc: "optional {lead, tail} text wrapping the assembled decision prompt"
+  blocks:
+    required: true
+    kind: list
+    desc: "the scroll, top to bottom — one block per idea"
+
+blocks:
+
+  # ── text & narrative ──────────────────────────────────────────────────
+  prose:
+    desc: "A short reading passage — markdown paragraphs and bullet lists. Use for explanation/narrative between visuals."
+    fields:
+      heading:
+        desc: "optional section heading (h2)"
+      body:
+        required: true
+        desc: "markdown: paragraphs, **bold**, *italic*, `code`, [text](url), and `- ` bullet lists"
+    example: |
+      - type: prose
+        heading: Why it's slow
+        body: |
+          The build is slow for **three** reasons.
+          - serial SVG coordinate computation
+          - token bloat
+
+  callout:
+    desc: "A boxed aside that breaks the flow — a key takeaway, tip, warning, or danger note."
+    fields:
+      tone:
+        enum: [note, tip, warn, danger]
+        desc: "note=neutral accent, tip=good, warn=caution, danger=bad"
+      title:
+        desc: "optional bold lead-in"
+      body:
+        required: true
+        desc: "markdown body"
+    example: |
+      - type: callout
+        tone: tip
+        title: Key takeaway
+        body: |
+          **Check the cache first.** Most speed problems start here.
+
+  points:
+    desc: "A scannable list of claims, one per line, each with an optional supporting detail."
+    fields:
+      heading:
+        desc: "optional heading"
+      items:
+        required: true
+        kind: list
+        desc: "one claim per item"
+        item:
+          text:
+            required: true
+            desc: "the claim"
+          detail:
+            desc: "smaller supporting line"
+    example: |
+      - type: points
+        heading: Improvement points
+        items:
+          - text: "Switch serial computation to parallel"
+            detail: "Up to 2.1× faster with 4 threads"
+          - text: "Drop unnecessary tokens"
+
+  steps:
+    desc: "An ordered procedure — numbered steps, each a title plus optional detail. Use for how-to / action sequences."
+    fields:
+      heading:
+        desc: "optional heading"
+      items:
+        required: true
+        kind: list
+        desc: "one step per item"
+        item:
+          title:
+            required: true
+            desc: "step label"
+          body:
+            desc: "markdown detail"
+    example: |
+      - type: steps
+        heading: Build optimization steps
+        items:
+          - title: Run profiling
+            body: "Find the bottleneck with `make profile`."
+          - title: Switch to parallel
+            body: "Replace the serial loop with `concurrent.futures`."
+          - title: Apply caching
+
+  # ── layout & grouping ─────────────────────────────────────────────────
+  group:
+    desc: "A titled cluster that groups related child blocks under ONE heading and one shared spacing — optionally side by side in 2 columns. Use it to organise the scroll into sections (an overview cluster up top, or a side-by-side pair like a table beside its notes) instead of letting related blocks drift down the page as separate full-width islands. Children are ordinary blocks of any type."
+    fields:
+      heading:
+        desc: "optional cluster heading (h2)"
+      columns:
+        enum: [1, 2]
+        desc: "1 = stacked (default); 2 = side by side (breaks out wider, collapses to 1 column on narrow screens) — good for a table beside its commentary"
+      tone:
+        enum: [accent]
+        desc: "accent = give the cluster a subtle accent-tinted band background for emphasis (e.g. the overview cluster up top)"
+      blocks:
+        required: true
+        kind: blocks
+        desc: "the child blocks in this cluster — the same block vocabulary as the top level (a child should not be another group)"
+    example: |
+      - type: group
+        heading: Current status
+        columns: 2
+        blocks:
+          - type: stats
+            items:
+              - {n: "10/10", l: tests ok, tone: good}
+              - {n: "17", l: commits}
+          - type: points
+            items:
+              - text: Deterministic core done
+              - text: Agent layer next
+
+  # ── tabular & quantitative ────────────────────────────────────────────
+  stats:
+    desc: "Big-number callouts — magnitudes/metrics that should land at a glance."
+    fields:
+      items:
+        required: true
+        kind: list
+        desc: "one card per metric"
+        item:
+          n:
+            required: true
+            desc: "the value, e.g. '3.2×', '12ms'"
+          l:
+            required: true
+            desc: "label under the number"
+          tone:
+            enum: [good, bad, accent]
+            desc: "color the number"
+          delta:
+            desc: "small ± change line, e.g. '+18%'"
+    example: |
+      - type: stats
+        nav: speed
+        items:
+          - {n: "3.2×", l: faster builds, tone: good, delta: "+18%"}
+          - {n: "12", l: services}
+
+  table:
+    desc: "A comparison table — options/properties across dimensions, seen in one view. Keep cells short (a word/phrase)."
+    fields:
+      heading:
+        desc: "optional heading"
+      columns:
+        required: true
+        kind: list
+        desc: "header labels (strings)"
+      rows:
+        required: true
+        kind: list
+        desc: "each row is a list of cells aligned to columns; a cell is a string, or {v: text, tone: good|bad|warn} to tint it"
+    example: |
+      - type: table
+        columns: [approach, tokens, accuracy]
+        rows:
+          - ["slides", "high", {v: "medium", tone: warn}]
+          - ["viz", {v: "low", tone: good}, {v: "always correct", tone: good}]
+
+  cards:
+    desc: "Comparable peer items shown side by side — each a titled card with body and optional bullets/badge."
+    fields:
+      heading:
+        desc: "optional heading"
+      items:
+        required: true
+        kind: list
+        desc: "one card per peer item"
+        item:
+          title:
+            required: true
+            desc: "card headline"
+          body:
+            desc: "short description"
+          badge:
+            desc: "small corner tag"
+          bullets:
+            kind: list
+            desc: "optional bullet strings"
+    example: |
+      - type: cards
+        items:
+          - title: "viz"
+            body: "Data-first visualization"
+            badge: "recommended"
+            bullets: ["Saves tokens", "Always accurate"]
+          - title: "slides"
+            body: "Slide-based presentation"
+            bullets: ["Rich layouts"]
+
+  bars:
+    desc: "A bar chart for ranking/distribution — labeled magnitudes. Horizontal by default."
+    fields:
+      heading:
+        desc: "optional heading"
+      dir:
+        enum: [h, v]
+        desc: "h=horizontal (default), v=vertical"
+      max:
+        desc: "axis maximum (default = largest value)"
+      items:
+        required: true
+        kind: list
+        desc: "one bar per item"
+        item:
+          label:
+            required: true
+            desc: "bar label"
+          value:
+            required: true
+            desc: "number"
+          tone:
+            enum: [good, bad, accent]
+            desc: "bar color"
+    example: |
+      - type: bars
+        items:
+          - {label: "viz", value: 92, tone: good}
+          - {label: "present", value: 67}
+          - {label: "markdown", value: 41, tone: bad}
+
+  badges:
+    desc: "A row of small labeled pills — tech stack, tags, statuses."
+    fields:
+      heading:
+        desc: "optional heading"
+      items:
+        required: true
+        kind: list
+        desc: "one pill per item"
+        item:
+          text:
+            required: true
+            desc: "pill label"
+          tone:
+            enum: [good, warn, bad, accent, muted]
+            desc: "pill color"
+    example: |
+      - type: badges
+        items:
+          - {text: "Python", tone: accent}
+          - {text: "stable", tone: good}
+          - {text: "beta", tone: warn}
+          - {text: "deprecated", tone: bad}
+
+  # ── code ──────────────────────────────────────────────────────────────
+  code:
+    desc: "A code block — monospace, optional filename/lang header, syntax-highlighted, optional highlighted lines and a line-number gutter. Source is preserved verbatim."
+    fields:
+      lang:
+        desc: "language label for the header, e.g. python — also picks the keyword set for highlighting (python/javascript/typescript/go/rust/java/c/sql/bash; others use a union)"
+      filename:
+        desc: "optional file name in the header"
+      code:
+        required: true
+        desc: "the raw source (kept exactly)"
+      highlight:
+        kind: list
+        desc: "1-based line numbers (counted within this block) to tint"
+      lineno:
+        desc: "true to show a line-number gutter, numbered from 1"
+      start:
+        desc: "first gutter line number (int); use when showing real file lines, e.g. 40. Implies lineno"
+    example: |
+      - type: code
+        filename: components/flow.py
+        lang: python
+        start: 101
+        highlight: [2]
+        code: |
+          def _box_size(node):
+              title = str(node["title"])
+              return max(MIN_W, min(MAX_W, w)), h
+
+  diff:
+    desc: "A code diff — added/removed lines colored, optional old|new line-number gutter. Paste a unified-diff body."
+    fields:
+      filename:
+        desc: "optional file path header"
+      patch:
+        required: true
+        desc: "unified diff text: + added, - removed, space context, @@ hunk headers"
+      lineno:
+        desc: "true to show an old|new line-number gutter; numbers come from real '@@ -a +b @@' hunk headers, else count from 1"
+    example: |
+      - type: diff
+        filename: components/flow.py
+        lineno: true
+        patch: |
+          @@ -41,4 +41,4 @@ def render(block):
+               sx, sy = anchors(src, True)
+          -    return ""
+          +    return svg
+
+  # ── structure, flow & time ────────────────────────────────────────────
+  tree:
+    desc: "A file/dir or hierarchy tree with connector lines. Nests to any depth; mark changed nodes."
+    fields:
+      heading:
+        desc: "optional heading"
+      root:
+        required: true
+        kind: map
+        desc: "a node: {label, kind: dir|file, badge: add|mod|del, children: [nodes]} — nests recursively"
+    example: |
+      - type: tree
+        root:
+          label: viz/
+          kind: dir
+          children:
+            - {label: build.py, kind: file}
+            - {label: components/, kind: dir, badge: add, children: [{label: flow.py, kind: file, badge: add}]}
+
+  flow:
+    desc: "A branching flowchart — nodes connected by directed edges. You give only nodes and edges; the script computes the whole layout."
+    fields:
+      dir:
+        enum: [auto, down, right]
+        desc: "layout direction. auto (default) lays a long/linear chain out vertically and a short flow horizontally; force with down or right. down gives edge labels the most room"
+      nodes:
+        required: true
+        kind: list
+        desc: "the boxes; the script ranks and places them"
+        item:
+          id:
+            required: true
+            desc: "node id used by edges"
+          title:
+            required: true
+            desc: "box headline"
+          sub:
+            desc: "small second line"
+          rank:
+            desc: "optional layout-rank override (int)"
+          col:
+            desc: "optional in-rank position override (int)"
+      edges:
+        required: true
+        kind: list
+        desc: "directed edges as 'srcId>dstId' strings, optionally 'srcId>dstId: label'"
+    example: |
+      - type: flow
+        nodes:
+          - {id: shell, title: shell.html, sub: structure}
+          - {id: build, title: build.py, sub: assemble}
+          - {id: out, title: page.html, sub: one file}
+        edges: [shell>build, build>out]
+
+  sequence:
+    desc: "A sequence diagram — actors as columns, messages as arrows down over time."
+    fields:
+      actors:
+        required: true
+        kind: list
+        desc: "actor names, left to right"
+      messages:
+        required: true
+        kind: list
+        desc: "one arrow per row, top to bottom"
+        item:
+          from:
+            required: true
+            desc: "sender actor"
+          to:
+            required: true
+            desc: "receiver actor"
+          label:
+            desc: "message label"
+          return:
+            desc: "true for a dashed return arrow"
+    example: |
+      - type: sequence
+        actors: [client, api, db]
+        messages:
+          - {from: client, to: api, label: request}
+          - {from: api, to: db, label: query}
+          - {from: db, to: api, label: rows, return: true}
+          - {from: api, to: client, label: 200, return: true}
+
+  timeline:
+    desc: "A vertical timeline — events in order down a rail. Use for history, roadmap, incident sequence."
+    fields:
+      heading:
+        desc: "optional heading"
+      events:
+        required: true
+        kind: list
+        desc: "one event per row, top to bottom"
+        item:
+          when:
+            required: true
+            desc: "date/label"
+          title:
+            required: true
+            desc: "event headline"
+          body:
+            desc: "optional detail"
+          tone:
+            enum: [good, warn, bad, accent]
+            desc: "colors the dot"
+    example: |
+      - type: timeline
+        heading: Incident timeline
+        events:
+          - {when: "14:02", title: "Alert fired", tone: bad}
+          - {when: "14:15", title: "Root cause found", body: "Memory leak in worker pool", tone: warn}
+          - {when: "14:40", title: "Fix deployed", tone: good}
+
+  # ── decision ──────────────────────────────────────────────────────────
+  decision:
+    desc: "A choice to put in front of the user — selectable options that assemble into a copy-paste next-step prompt. Use when the answer hinges on the user's call."
+    fields:
+      question:
+        required: true
+        desc: "the decision being asked"
+      key:
+        desc: "short id grouping this decision's options (default auto)"
+      options:
+        required: true
+        kind: list
+        item:
+          label:
+            required: true
+            desc: "option title"
+          detail:
+            desc: "one-line tradeoff"
+          frag:
+            required: true
+            desc: "prompt fragment this option contributes if picked — user's casual voice"
+          pick:
+            desc: "true to mark your recommended lean"
+      freetext:
+        desc: "optional label for a free-text input contributing 'label: {value}'"
+
+  compare:
+    desc: "A weighted decision matrix — candidates scored against criteria with Harvey-ball ratings, a weighted total, and an optional radar of the tradeoff shape."
+    fields:
+      candidates:
+        required: true
+        kind: list
+        desc: "the options compared (columns)"
+      criteria:
+        required: true
+        kind: list
+        desc: "one row per criterion"
+        item:
+          name:
+            required: true
+            desc: "criterion label"
+          weight:
+            desc: "relative importance number (default 1)"
+          ratings:
+            required: true
+            kind: list
+            desc: "0–4 score per candidate, aligned to candidates order (higher = better; invert any lower-is-better criterion yourself)"
+      radar:
+        desc: "true to also draw a radar chart of the ratings"
+    example: |
+      - type: compare
+        candidates: [slides, viz]
+        radar: true
+        criteria:
+          - {name: token efficiency, weight: 2, ratings: [2, 4]}
+          - {name: expressiveness, weight: 1, ratings: [4, 3]}
+
+  # ── proportion, magnitude & density figures ───────────────────────────
+  waterfall:
+    desc: "A waterfall breakdown — how a total decomposes into additive parts (profiling, a latency/size budget: total = Σ parts). Use when the story is 'what makes up this number'."
+    fields:
+      items:
+        required: true
+        kind: list
+        desc: "the parts in order; each stacks onto the running total"
+        item:
+          label:
+            required: true
+            desc: "part name"
+          value:
+            required: true
+            desc: "numeric magnitude of this part (same unit across all items)"
+          tone:
+            enum: [good, bad, accent]
+            desc: "color this segment"
+      total_label:
+        desc: "label for the final cumulative total bar (default 'Total')"
+      unit:
+        desc: "unit suffix shown on values, e.g. 'ms', 'KB'"
+    example: |
+      - type: waterfall
+        unit: ms
+        total_label: total response
+        items:
+          - {label: network, value: 300}
+          - {label: parsing, value: 500, tone: bad}
+          - {label: render, value: 200}
+
+  donut:
+    desc: "A donut chart of proportions — parts of a whole (share/breakdown/mix). Reach for it when the ratio between slices matters more than absolute size; for a ranking use bars instead."
+    fields:
+      items:
+        required: true
+        kind: list
+        desc: "slices; each value is summed to compute its share"
+        item:
+          label:
+            required: true
+            desc: "slice label"
+          value:
+            required: true
+            desc: "numeric weight (the share % is computed for you)"
+          tone:
+            enum: [good, bad, accent]
+            desc: "color this slice"
+      center:
+        desc: "text shown in the donut hole, e.g. a total or headline figure"
+    example: |
+      - type: donut
+        center: 1.2M req
+        items:
+          - {label: 2xx, value: 78, tone: good}
+          - {label: 4xx, value: 18}
+          - {label: 5xx, value: 4, tone: bad}
+
+  heatmap:
+    desc: "A grid of cells shaded by intensity — one magnitude across two axes (day × hour, service × endpoint). Use when the hotspot/pattern matters, not the exact numbers."
+    fields:
+      cols:
+        required: true
+        kind: list
+        desc: "column labels left to right (the x axis)"
+      rows:
+        required: true
+        kind: list
+        desc: "one row per y-axis label"
+        item:
+          label:
+            required: true
+            desc: "row label"
+          cells:
+            required: true
+            kind: list
+            desc: "numeric value per column, aligned to `cols` order (shade scales with value)"
+      unit:
+        desc: "unit suffix shown with cell values"
+    example: |
+      - type: heatmap
+        cols: [Mon, Tue, Wed, Thu, Fri]
+        rows:
+          - {label: AM, cells: [12, 18, 9, 22, 30]}
+          - {label: PM, cells: [40, 35, 50, 28, 60]}
+
+  # ── annotated code ────────────────────────────────────────────────────
+  annotated:
+    desc: "Code with per-line inline notes — for review, walkthroughs, onboarding. Each line is shown verbatim and may carry a short annotation and a highlight. Use when the point is WHY specific lines matter, not just the code itself (for plain code use `code`)."
+    fields:
+      lang:
+        desc: "language hint for the header label (e.g. go, ts)"
+      filename:
+        desc: "optional file path shown in the header"
+      lines:
+        required: true
+        kind: list
+        desc: "source lines in order"
+        item:
+          code:
+            required: true
+            desc: "one source line, verbatim (preserve leading indentation)"
+          note:
+            desc: "annotation for this line (markdown inline: **bold**, `code`)"
+          mark:
+            enum: [add, del, warn, focus]
+            desc: "highlight: add/del like a diff, warn=caution, focus=emphasis"
+    example: |
+      - type: annotated
+        lang: go
+        filename: lock.go
+        lines:
+          - {code: "mu.Lock()", note: "critical section starts here"}
+          - {code: "defer mu.Unlock()", note: "**defer** so it unlocks even on panic", mark: focus}
+          - {code: "balance += amount"}
+
+  # ── media & embeds ────────────────────────────────────────────────────
+  # AGENT NOTE: `image` reads the file at `src` at build time and inlines it as a
+  # base64 data URI, so the page stays one offline file. To show a visualization
+  # or picture that does NOT exist yet, FIRST generate it with an appropriate
+  # image-generation skill/tool, save it to a local path, then pass that path as
+  # `src`. Only local filesystem paths are read — remote URLs are never fetched.
+  image:
+    desc: "Embed a local image file (a screenshot, a diagram, a generated chart). Inlined as a data URI — fully offline."
+    fields:
+      src:
+        required: true
+        desc: "local filesystem path to the image file"
+      alt:
+        desc: "alt text for accessibility"
+      caption:
+        desc: "caption shown under the image"
+      width:
+        desc: "display width — a px number or CSS value ('320', '60%'); height auto-scales to preserve the aspect ratio"
+      height:
+        desc: "display height; set BOTH width and height only when you must force exact dimensions (may distort the image)"
+    example: |
+      - type: image
+        src: /tmp/architecture.png
+        caption: Service architecture
+        width: 560
+
+  bookmark:
+    desc: "A link-preview card — a rich URL bookmark with title, description, site, and an optional thumbnail/favicon. It does NOT load or fetch the page; you supply the metadata, and any image as a local path. Use to reference an external source as a tappable card."
+    fields:
+      url:
+        required: true
+        desc: "the link target (href)"
+      title:
+        desc: "card title (defaults to the URL's domain)"
+      desc:
+        desc: "short description or excerpt"
+      site:
+        desc: "site name shown beside the favicon (defaults to the domain)"
+      thumb:
+        desc: "local path to a preview image, embedded like `image`; omit if none"
+      favicon:
+        desc: "local path to a favicon, embedded; omit to show a domain-letter monogram"
+    example: |
+      - type: bookmark
+        url: https://go.dev/blog/maps
+        title: Go maps in action
+        desc: Map internals and concurrency caveats.
+        site: The Go Blog
+        thumb: /tmp/go-maps-og.png

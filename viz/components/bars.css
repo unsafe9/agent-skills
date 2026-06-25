@@ -1,0 +1,29 @@
+/* bars.css — cosmetics + sizing for the `bars` block.
+   Vertical bars (.bars/.bar) lifted from present scroll shell.
+   Horizontal bars (.hbars/.hbar-*) are new: label + track + value layout. */
+
+/* ── vertical bars (dir:v) — lifted from present scroll shell ── */
+.bars{display:flex; align-items:flex-end; gap:var(--gap); height:34vh; min-height:200px; margin-block:var(--rhythm)}
+.bar{flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:.4rem}
+.bar i{display:block; width:100%; background:var(--accent); border-radius:8px 8px 0 0; min-height:4px; height:calc(var(--v,0)*100%)}
+.bar b{font-size:1.2rem; font-weight:720; color:var(--fg)}
+.bar span{font-size:.95rem; color:var(--muted); text-align:center}
+
+/* vertical bar tone variants */
+.bar.good i{background:var(--good)}
+.bar.bad i{background:var(--bad)}
+.bar.accent i{background:var(--accent)}
+
+/* ── horizontal bars (dir:h, default) ── label sits ABOVE a full-width track so
+   long labels wrap freely instead of truncating into a narrow column. ── */
+.hbars{display:flex; flex-direction:column; gap:.9rem; margin-block:var(--rhythm)}
+.hbar{display:grid; grid-template-columns:1fr auto; grid-template-areas:"label val" "track track"; align-items:baseline; column-gap:.75rem; row-gap:.35rem}
+.hbar-label{grid-area:label; font-size:1rem; color:var(--fg)}
+.hbar-val{grid-area:val; font-size:.95rem; font-weight:600; color:var(--fg); font-variant-numeric:tabular-nums; white-space:nowrap}
+.hbar-track{grid-area:track; background:var(--bg2); border:1px solid var(--line); border-radius:999px; overflow:hidden; height:.7rem}
+.hbar-fill{display:block; height:100%; width:calc(var(--v,0)*100%); background:var(--accent); border-radius:999px}
+
+/* horizontal bar tone variants */
+.hbar.good .hbar-fill{background:var(--good)}
+.hbar.bad .hbar-fill{background:var(--bad)}
+.hbar.accent .hbar-fill{background:var(--accent)}

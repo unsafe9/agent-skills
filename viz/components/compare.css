@@ -1,0 +1,39 @@
+/* compare.css — EVERYTHING specific to the `compare` block: the decision
+   matrix, the SVG Harvey balls, and the radar. Radar/legend classes are lifted
+   from present (.radar/.web/.spoke/.axis-l/.blob + .legend/.swatch) so they
+   color via skin tokens only. Injected only when a `compare` block appears. */
+
+/* matrix table — candidates across, criteria down */
+.cmp-matrix{width:100%; border-collapse:collapse; margin-block:var(--rhythm); font-variant-numeric:tabular-nums}
+.cmp-matrix th,.cmp-matrix td{padding:.55rem .7rem; border-bottom:1px solid var(--line); text-align:center; vertical-align:middle}
+.cmp-matrix thead th{color:var(--muted); font-weight:600; text-transform:uppercase; font-size:.82rem; letter-spacing:.03em}
+.cmp-matrix th.crit,.cmp-matrix th.crit-h{text-align:left; color:var(--fg); font-weight:600; white-space:normal}
+.cmp-matrix th.crit-h{color:var(--muted)}
+.cmp-matrix .wt{display:inline-block; margin-left:.4rem; color:var(--muted); font-weight:500; font-size:.82em}
+.cmp-matrix td.win,.cmp-matrix thead th.win{background:color-mix(in srgb, var(--accent) 10%, transparent)}
+.cmp-matrix thead th.win{color:var(--accent)}
+.cmp-matrix tr.total td,.cmp-matrix tr.total th{border-top:2px solid var(--line); border-bottom:0}
+.cmp-matrix tr.total b{font-size:1.25rem; color:var(--fg); font-weight:800}
+.cmp-matrix tr.total td.win b{color:var(--accent)}
+.cmp-matrix .crown{color:var(--accent); font-size:.95rem; vertical-align:.05em}
+
+/* Harvey balls — SVG: empty ring + a filled wedge for the score fraction */
+.hball{display:inline-block; vertical-align:-.2em}
+.hball .hb-ring{fill:none; stroke:var(--line); stroke-width:1.5}
+.hball .hb-fill{fill:var(--accent); stroke:none}
+
+/* radar — lifted cosmetics + sizing from present (skin tokens only) */
+.cmp-radar{max-width:380px; margin:var(--rhythm) auto 0}
+.radar{width:100%; height:auto; display:block}
+.radar .web{stroke:var(--line); fill:none}
+.radar .spoke{stroke:var(--line)}
+.radar .axis-l{fill:var(--muted); font-family:var(--font); font-size:13px}
+.radar .blob{fill:var(--accent); fill-opacity:.16; stroke:var(--accent); stroke-width:2; stroke-linejoin:round}
+.radar .blob.b{fill:var(--good); stroke:var(--good)}
+.radar .blob.c{fill:var(--bad); stroke:var(--bad)}
+
+/* radar legend (lifted from present base.css .legend/.swatch) */
+.legend{display:flex; flex-wrap:wrap; gap:.4rem 1.1rem; justify-content:center; margin-top:.7rem; font-size:.86rem; color:var(--muted)}
+.legend span{display:inline-flex; align-items:center; gap:.4rem}
+.swatch{display:inline-block; width:.85rem; height:.85rem; border-radius:3px; background:var(--muted)}
+.swatch.a{background:var(--accent)} .swatch.b{background:var(--good)} .swatch.bad{background:var(--bad)}
