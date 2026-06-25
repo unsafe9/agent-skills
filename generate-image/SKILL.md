@@ -1,6 +1,6 @@
 ---
 name: generate-image
-description: "Generate images from a text prompt using OpenAI's gpt-image-2 (default) or Google Gemini (Nano Banana) and open them in the system image viewer. Use whenever the user asks to create, generate, draw, make, or produce an image/picture/illustration/poster/icon/logo/infographic/thumbnail/wallpaper from a description — even if they don't mention OpenAI, Gemini, gpt-image-2, or DALL·E explicitly. Triggers include phrases like 'generate an image of', 'draw me a', 'create a picture', 'make a visual of'. Also use when the user names a backend ('draw it with gemini', 'make it with gpt') or wants to compare/race both models on the same prompt ('race gpt vs gemini'), and for iterating on a prompt (regenerating with variations or a refined description). Requires OPENAI_API_KEY (and GEMINI_API_KEY for the gemini provider or --race)."
+description: "Generate images from a text prompt using OpenAI's gpt-image-2 (default) or Google Gemini (Nano Banana) and open them in the system image viewer. Use whenever the user asks to create, generate, draw, make, or produce an image/picture/illustration/poster/icon/logo/infographic/thumbnail/wallpaper from a description — even if they don't mention OpenAI, Gemini, gpt-image-2, or DALL·E explicitly. Triggers include phrases like 'generate an image of', 'draw me a', 'create a picture', 'make a visual of'. Also use when the user names a backend ('use gemini', 'use gpt') or wants to compare/race both models on the same prompt ('race gpt vs gemini'), and for iterating on a prompt (regenerating with variations or a refined description). Requires OPENAI_API_KEY (and GEMINI_API_KEY for the gemini provider or --race)."
 metadata:
   argument-hint: "<prompt> [--provider openai|gemini] [--race] [--tier low|medium|high] [--aspect 1:1|3:2|2:3|4:3|3:4|16:9|9:16] [--resolution 1K|2K|4K] [--size <WxH>] [-n 1-10] [--thinking low|medium|high] [--out-dir <path>] [--no-display]"
 ---
@@ -13,7 +13,7 @@ Generate raster images from a text prompt, save them as PNGs, and open them in t
 - **gemini** — Gemini native image generation (Nano Banana), reads `GEMINI_API_KEY`.
 - **--race** — run both on the same prompt for a side-by-side comparison.
 
-The bundled script handles the API call, file save, and terminal render in one shot — don't re-implement it inline.
+The bundled script handles the API call, file save, and viewer preview in one shot — don't re-implement it inline.
 
 ## Usage
 
@@ -26,6 +26,8 @@ python {{SKILL_DIR}}/generate_image.py "<prompt>" [options]
 The script prints each saved PNG path to stdout (one per line) and opens each in the system image viewer (`open` on macOS). On other platforms it just prints the path; pass `--no-display` to skip opening the viewer entirely.
 
 Files default to `~/Pictures/ai-generated/<timestamp>.png`. In `--race` (or any multi-provider run) filenames are tagged with the provider, e.g. `<timestamp>-openai.png` / `<timestamp>-gemini.png`, so generations don't collide and stay easy to tell apart.
+
+**Generation is slow — plan for it.** A single image usually takes tens of seconds and can stretch to a few minutes; the script caps each HTTP call at 600s. Time compounds: higher `--tier`, `2K`/`4K`, and `--thinking high` lengthen each call; `-n N` on Gemini loops one call per image (≈N×); `--race` runs the two providers sequentially (≈sum of both). When invoking through a shell tool, set a generous timeout (toward the 10-minute max for `--race` or batches) so it isn't killed mid-generation, and tell the user it may be a moment before the viewer opens.
 
 ### Options
 
@@ -84,19 +86,13 @@ If a first pass comes out with garbled text or messy layout on openai, suggest r
 
 ## Examples
 
-User: "draw me a watercolor of a cat sleeping on a windowsill"
+User: "Draw a watercolor of a cat sleeping on a windowsill"
 
 ```bash
 python {{SKILL_DIR}}/generate_image.py "A cat sleeping on a sunlit windowsill, soft watercolor, warm pastel tones"
 ```
 
-User: "draw this with gemini"
-
-```bash
-python {{SKILL_DIR}}/generate_image.py "<prompt>" --provider gemini
-```
-
-User: "generate it with both gpt and gemini and compare"
+User: "Generate with both gpt and gemini so I can compare"
 
 ```bash
 python {{SKILL_DIR}}/generate_image.py "<prompt>" --race --aspect 3:2
@@ -104,7 +100,7 @@ python {{SKILL_DIR}}/generate_image.py "<prompt>" --race --aspect 3:2
 
 (Saves `<stamp>-openai.png` and `<stamp>-gemini.png`, previews both with a labeled header.)
 
-User: "make this big, in 4K high resolution"
+User: "Make this big, in 4K high resolution"
 
 ```bash
 python {{SKILL_DIR}}/generate_image.py "<prompt>" --provider gemini --resolution 4K
@@ -112,7 +108,7 @@ python {{SKILL_DIR}}/generate_image.py "<prompt>" --provider gemini --resolution
 
 (Default stays moderate `1K`; only raise resolution when the user asks.)
 
-User: "a 4-panel infographic explaining the OAuth 2.1 flow, with Korean labels"
+User: "A 4-panel infographic explaining the OAuth 2.1 flow, with Korean labels"
 
 ```bash
 python {{SKILL_DIR}}/generate_image.py \
@@ -120,7 +116,7 @@ python {{SKILL_DIR}}/generate_image.py \
   --aspect 3:2 --thinking medium
 ```
 
-User: "generate 4 with the same concept"
+User: "Generate 4 with the same concept"
 
 ```bash
 python {{SKILL_DIR}}/generate_image.py "<same prompt>" -n 4
@@ -128,14 +124,14 @@ python {{SKILL_DIR}}/generate_image.py "<same prompt>" -n 4
 
 (Single OpenAI call, not four separate ones — stylistically consistent and cheaper.)
 
-User: "redo the previous image a little differently"
+User: "Regenerate the previous image, a little different"
 
 Don't just rerun the same prompt — ask what to change, refine the prompt, then call again. Saving the user from paying for near-duplicates is part of the job.
 
 ## First-run dependencies
 
 - `OPENAI_API_KEY` must be exported for the openai provider; `GEMINI_API_KEY` for the gemini provider. `--race` needs both. The script errors out early if the required key is missing — ask the user to export it rather than hunting through dotfiles.
-- Python 3 only (stdlib — no `pip install` needed). Uses `curl` for the HTTP call to dodge Python SSL cert issues. Preview just shells out to macOS `open`; no extra tooling required.
+- Python 3 stdlib only — no `pip install`. Needs `python3` and `curl` on PATH. Viewer preview is macOS-only (`open`); on other platforms only the path prints, same as `--no-display`.
 
 ## Scope
 
