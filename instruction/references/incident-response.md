@@ -12,8 +12,11 @@ instruction text.
    conflicting instructions, stale context, over-specific wording, unchecked
    assumption, weak validation, wrong tool/source preference, or a rule placed on
    the wrong surface.
-3. Check whether prose is the right fix. Prefer deterministic enforcement in code,
-   tests, linters, hooks, templates, or scripts when that would be more reliable.
+3. Check whether prose is the right fix, and whether the fix is a deletion. A capable
+   agent more often trips over a buried, ambiguous, or contradicted instruction than
+   over a missing one, so weigh removing or repairing existing text before adding to
+   it. Deterministic enforcement in code, tests, linters, hooks, templates, or scripts
+   beats prose whenever it is available.
 4. Choose the narrowest durable surface: nested `CLAUDE.md` for a directory,
    repository `CLAUDE.md` for repo-wide behavior, a skill for reusable conditional
    workflow, an agent prompt for a delegated role, or a hook for event-specific
@@ -29,7 +32,10 @@ short line that names the concrete incident as a reminder, but the operative rul
 must still follow this skill's normal principles: final-state, terse, host-neutral,
 scoped to the right surface, and not a transcript of what just went wrong.
 
-## Draft checklist
+## Draft questions
+
+Use only the questions that would change the instruction. They are not required
+sections or a checklist to reproduce in the result.
 
 - Trigger: when should a future agent apply this?
 - Action: what must it do differently?
